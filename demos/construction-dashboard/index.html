@@ -471,7 +471,7 @@
 
   // 判斷解碼後的文字是否看起來像亂碼（大量 U+FFFD 取代字元，或幾乎沒有中文字）
   function looksGarbled(text) {
-    const replacementCount = (text.match(/�/g) || []).length;
+    const replacementCount = (text.match(/\uFFFD/g) || []).length;
     if (replacementCount > 0) return true;
     const cjkCount = (text.match(/[一-鿿]/g) || []).length;
     const hasAsciiLetters = /[A-Za-z]{3,}/.test(text.slice(0, 200));
