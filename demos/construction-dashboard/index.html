@@ -6,87 +6,102 @@
   }
 
   :root {
-    --bg: #eeece5;
+    --bg: #f2f1ec;
     --bg-panel: #ffffff;
-    --ink: #23241f;
-    --ink-dim: #6b6a5f;
-    --line: #d9d6c9;
-    --accent: #1f4e6b;
-    --accent-soft: #e2ebef;
+    --ink: #14140f;
+    --ink-dim: #6f6c60;
+    --line: #d6d2c4;
+    --line-strong: #14140f;
+    --accent: #1c4d78;
+    --accent-soft: #e4ecf2;
     --good: #3a7d44;
     --good-soft: #e5f0e3;
-    --warn: #b3771c;
-    --warn-soft: #f7ecd8;
-    --crit: #a83a32;
-    --crit-soft: #f6e2df;
-    --shadow: 0 1px 2px rgba(35,36,31,0.06), 0 4px 14px rgba(35,36,31,0.05);
+    --warn: #a8721c;
+    --warn-soft: #f5ecd8;
+    --crit: #a8352c;
+    --crit-soft: #f5e2df;
+    --grid: rgba(20,20,15,0.05);
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1c1c19;
-      --bg-panel: #26261f;
-      --ink: #e8e6dc;
-      --ink-dim: #a3a190;
-      --line: #3a3a30;
-      --accent: #7fb3d5;
-      --accent-soft: #263845;
+      --bg: #131311;
+      --bg-panel: #1b1b17;
+      --ink: #ece9de;
+      --ink-dim: #9d9a8c;
+      --line: #35342b;
+      --line-strong: #ece9de;
+      --accent: #6fa8d8;
+      --accent-soft: #1f2c37;
       --good: #7fbf88;
-      --good-soft: #253326;
+      --good-soft: #223024;
       --warn: #d9a54a;
-      --warn-soft: #3a3021;
-      --crit: #e08276;
-      --crit-soft: #3a2422;
-      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+      --warn-soft: #362c1c;
+      --crit: #df8378;
+      --crit-soft: #382320;
+      --grid: rgba(236,233,222,0.05);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #1c1c19; --bg-panel: #26261f; --ink: #e8e6dc; --ink-dim: #a3a190;
-    --line: #3a3a30; --accent: #7fb3d5; --accent-soft: #263845;
-    --good: #7fbf88; --good-soft: #253326; --warn: #d9a54a; --warn-soft: #3a3021;
-    --crit: #e08276; --crit-soft: #3a2422;
-    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+    --bg: #131311; --bg-panel: #1b1b17; --ink: #ece9de; --ink-dim: #9d9a8c;
+    --line: #35342b; --line-strong: #ece9de; --accent: #6fa8d8; --accent-soft: #1f2c37;
+    --good: #7fbf88; --good-soft: #223024; --warn: #d9a54a; --warn-soft: #362c1c;
+    --crit: #df8378; --crit-soft: #382320; --grid: rgba(236,233,222,0.05);
   }
   :root[data-theme="light"] {
-    --bg: #eeece5; --bg-panel: #ffffff; --ink: #23241f; --ink-dim: #6b6a5f;
-    --line: #d9d6c9; --accent: #1f4e6b; --accent-soft: #e2ebef;
-    --good: #3a7d44; --good-soft: #e5f0e3; --warn: #b3771c; --warn-soft: #f7ecd8;
-    --crit: #a83a32; --crit-soft: #f6e2df;
-    --shadow: 0 1px 2px rgba(35,36,31,0.06), 0 4px 14px rgba(35,36,31,0.05);
+    --bg: #f2f1ec; --bg-panel: #ffffff; --ink: #14140f; --ink-dim: #6f6c60;
+    --line: #d6d2c4; --line-strong: #14140f; --accent: #1c4d78; --accent-soft: #e4ecf2;
+    --good: #3a7d44; --good-soft: #e5f0e3; --warn: #a8721c; --warn-soft: #f5ecd8;
+    --crit: #a8352c; --crit-soft: #f5e2df; --grid: rgba(20,20,15,0.05);
   }
 
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--bg);
+    background:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+      var(--bg);
+    background-size: 32px 32px, 32px 32px, auto;
     color: var(--ink);
     font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
     line-height: 1.5;
   }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 80px; }
 
-  header.top {
+  /* ── 標題區：仿建築圖紙標題框 ── */
+  header.titleblock {
+    border: 1.5px solid var(--line-strong);
+    background: var(--bg-panel);
+    margin-bottom: 28px;
+    position: relative;
+  }
+  header.titleblock::before,
+  header.titleblock::after,
+  .corner-tick {
+    content: "";
+  }
+  .tb-main {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     gap: 24px;
     flex-wrap: wrap;
-    border-bottom: 2px solid var(--ink);
-    padding-bottom: 18px;
-    margin-bottom: 28px;
+    padding: 22px 24px 18px;
   }
   .eyebrow {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 11px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--accent);
-    margin: 0 0 6px;
+    margin: 0 0 8px;
   }
+  .eyebrow::before { content: "⌗ "; }
   h1 {
     margin: 0;
-    font-size: 26px;
-    font-weight: 700;
+    font-size: 27px;
+    font-weight: 800;
     letter-spacing: -0.01em;
     text-wrap: balance;
   }
@@ -98,22 +113,37 @@
   }
   .meta span { display: block; }
 
-  /* upload bar */
+  .tb-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line-strong);
+  }
+  .tb-strip div {
+    padding: 9px 24px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+    border-left: 1px solid var(--line);
+  }
+  .tb-strip div:first-child { border-left: none; }
+  .tb-strip strong { color: var(--ink); font-weight: 700; }
+
+  /* ── 上傳列 ── */
   .upload-bar {
     display: flex;
     align-items: center;
     gap: 14px;
     flex-wrap: wrap;
     background: var(--bg-panel);
-    border: 1px solid var(--line);
-    border-radius: 10px;
+    border: 1px solid var(--line-strong);
     padding: 14px 18px;
-    margin-bottom: 28px;
-    box-shadow: var(--shadow);
+    margin-bottom: 20px;
   }
   .upload-bar .label {
     font-size: 13px;
     color: var(--ink-dim);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.02em;
   }
   .btn-file {
     position: relative;
@@ -122,11 +152,11 @@
     gap: 8px;
     background: var(--accent);
     color: #fff;
-    border: none;
-    border-radius: 6px;
+    border: 1px solid var(--accent);
     padding: 8px 16px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 0.02em;
     cursor: pointer;
   }
   .btn-file input {
@@ -139,19 +169,19 @@
     background: none;
     border: 1px solid var(--line);
     color: var(--ink-dim);
-    border-radius: 6px;
     padding: 7px 14px;
     font-size: 12px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
     cursor: pointer;
   }
-  .btn-reset:hover { border-color: var(--ink-dim); color: var(--ink); }
+  .btn-reset:hover { border-color: var(--line-strong); color: var(--ink); }
 
   .notice {
     font-size: 12.5px;
     color: var(--ink-dim);
     background: var(--accent-soft);
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-left: 3px solid var(--accent);
     padding: 10px 14px;
     margin-bottom: 28px;
     line-height: 1.6;
@@ -160,32 +190,33 @@
   .notice.error {
     background: var(--crit-soft);
     border-color: var(--crit);
+    border-left: 3px solid var(--crit);
     color: var(--crit);
     white-space: pre-line;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 12px;
   }
 
-  /* KPI row */
+  /* ── KPI 列 ── */
   .kpi-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
+    gap: 1px;
+    background: var(--line-strong);
+    border: 1px solid var(--line-strong);
     margin-bottom: 32px;
   }
   .kpi {
     background: var(--bg-panel);
-    border: 1px solid var(--line);
-    border-radius: 10px;
     padding: 16px 18px;
-    box-shadow: var(--shadow);
+    position: relative;
   }
   .kpi .kpi-label {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--ink-dim);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   .kpi .kpi-value {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -202,22 +233,27 @@
 
   section.panel {
     background: var(--bg-panel);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    box-shadow: var(--shadow);
+    border: 1px solid var(--line-strong);
     margin-bottom: 24px;
-    overflow: hidden;
   }
   .panel-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
   }
   .panel-head h2 {
-    font-size: 15px;
+    font-size: 14px;
     margin: 0;
     font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .panel-head h2 .sheet-no {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 8px;
   }
   .panel-head .hint {
     font-size: 11.5px;
@@ -225,7 +261,7 @@
     font-family: 'JetBrains Mono', ui-monospace, monospace;
   }
 
-  .table-scroll { overflow-x: auto; padding: 0 20px 20px; }
+  .table-scroll { overflow-x: auto; padding: 0 20px 16px; }
   table { width: 100%; border-collapse: collapse; min-width: 640px; }
   thead th {
     text-align: left;
@@ -233,9 +269,9 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--ink-dim);
-    border-bottom: 1px solid var(--line);
-    padding: 8px 10px;
-    font-weight: 600;
+    border-bottom: 1px solid var(--line-strong);
+    padding: 10px 10px 8px;
+    font-weight: 700;
   }
   tbody td {
     padding: 11px 10px;
@@ -249,12 +285,11 @@
   .bar-cell { display: flex; align-items: center; gap: 10px; min-width: 160px; }
   .bar-track {
     flex: 1;
-    height: 8px;
+    height: 6px;
     background: var(--line);
-    border-radius: 4px;
     overflow: hidden;
   }
-  .bar-fill { height: 100%; border-radius: 4px; background: var(--accent); }
+  .bar-fill { height: 100%; background: var(--accent); }
   .bar-fill.good { background: var(--good); }
   .bar-fill.warn { background: var(--warn); }
   .bar-fill.crit { background: var(--crit); }
@@ -264,12 +299,13 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 3px 9px;
-    border-radius: 100px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
   }
-  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+  .pill::before { content: ""; width: 6px; height: 6px; }
   .pill.good { background: var(--good-soft); color: var(--good); }
   .pill.good::before { background: var(--good); }
   .pill.warn { background: var(--warn-soft); color: var(--warn); }
@@ -283,11 +319,15 @@
     color: var(--ink-dim);
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     margin-top: 40px;
+    letter-spacing: 0.02em;
   }
 
   @media (max-width: 720px) {
     .kpi-row { grid-template-columns: repeat(2, 1fr); }
-    header.top { align-items: flex-start; }
+    .tb-main { align-items: flex-start; }
+    .tb-strip { grid-template-columns: 1fr; }
+    .tb-strip div { border-left: none; border-top: 1px solid var(--line); }
+    .tb-strip div:first-child { border-top: none; }
     .meta { text-align: left; }
   }
 
@@ -297,14 +337,21 @@
 </style>
 
 <div class="wrap">
-  <header class="top">
-    <div>
-      <p class="eyebrow">工地進度快照 · 靜態儀表板示範</p>
-      <h1>建案進度監控儀表板</h1>
+  <header class="titleblock">
+    <div class="tb-main">
+      <div>
+        <p class="eyebrow">工地進度快照 · 靜態儀表板示範</p>
+        <h1>建案進度監控儀表板</h1>
+      </div>
+      <div class="meta">
+        <span id="snapTime">快照時間 —</span>
+        <span id="siteCount">— 個案場</span>
+      </div>
     </div>
-    <div class="meta">
-      <span id="snapTime">快照時間 —</span>
-      <span id="siteCount">— 個案場</span>
+    <div class="tb-strip">
+      <div>圖號 <strong>DASH&#8209;01</strong></div>
+      <div>比例 <strong>快照 · 非即時</strong></div>
+      <div>資料來源 <strong id="tbSource">內建示範資料</strong></div>
     </div>
   </header>
 
@@ -330,7 +377,7 @@
 
   <section class="panel">
     <div class="panel-head">
-      <h2>各案場進度</h2>
+      <h2><span class="sheet-no">A&#8209;01</span>各案場進度</h2>
       <span class="hint">依完成率排序</span>
     </div>
     <div class="table-scroll">
@@ -367,6 +414,7 @@
   const fileInput = document.getElementById('csvInput');
   const fileNameEl = document.getElementById('fileName');
   const resetBtn = document.getElementById('resetBtn');
+  const tbSourceEl = document.getElementById('tbSource');
 
   const REQUIRED_HEADERS = ['案名', '階段', '完成率', '已售戶數', '總戶數', '狀態'];
 
@@ -467,7 +515,7 @@
       new Date().toLocaleString('zh-TW', {hour12: false});
 
     // KPIs
-    const avg = Math.round(rows.reduce((s, r) => s + r.完成率, 0) / rows.length);
+    const avg = (rows.reduce((s, r) => s + r.完成率, 0) / rows.length).toFixed(1);
     const behind = rows.filter(r => r.狀態 === '落後').length;
     const totalSold = rows.reduce((s, r) => s + r.已售戶數, 0);
     const totalUnits = rows.reduce((s, r) => s + r.總戶數, 0);
@@ -529,6 +577,7 @@
         render(rows);
         clearError();
         fileNameEl.textContent = '目前顯示：' + file.name;
+        tbSourceEl.textContent = file.name;
       } catch (err) {
         showError(err.message || String(err));
       }
@@ -542,6 +591,7 @@
     clearError();
     render(parseCSV(SAMPLE_CSV));
     fileNameEl.textContent = '目前顯示：示範資料';
+    tbSourceEl.textContent = '內建示範資料';
   });
 
   render(parseCSV(SAMPLE_CSV));
