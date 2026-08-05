@@ -157,6 +157,14 @@
     line-height: 1.6;
   }
   .notice strong { color: var(--ink); }
+  .notice.error {
+    background: var(--crit-soft);
+    border-color: var(--crit);
+    color: var(--crit);
+    white-space: pre-line;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+  }
 
   /* KPI row */
   .kpi-row {
@@ -310,6 +318,8 @@
     <button class="btn-reset" id="resetBtn">還原示範資料</button>
   </div>
 
+  <div class="notice error" id="errorBanner" hidden></div>
+
   <div class="notice">
     <strong>這是靜態快照，不是即時系統。</strong>
     畫面上的數字，是你上傳CSV那一刻的資料。重新整理頁面、或關掉分頁再打開，會回到最初的示範資料——因為這份網頁沒有連接任何資料庫，一切運算都只發生在你的瀏覽器裡。
@@ -358,17 +368,81 @@
   const fileNameEl = document.getElementById('fileName');
   const resetBtn = document.getElementById('resetBtn');
 
+  const REQUIRED_HEADERS = ['案名', '階段', '完成率', '已售戶數', '總戶數', '狀態'];
+
+  // 支援雙引號包裹欄位（欄位裡有逗號時），並正確處理逃脫的雙引號 ""
+  function splitCSVLine(line) {
+    const cells = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (line[i + 1] === '"') { cur += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          cur += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        cells.push(cur.trim());
+        cur = '';
+      } else {
+        cur += ch;
+      }
+    }
+    cells.push(cur.trim());
+    return cells;
+  }
+
   function parseCSV(text) {
     // 去掉 UTF-8 BOM（Windows Excel／記事本存檔常見）
     if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
-    const lines = text.trim().split(/\r?\n/);
-    const headers = lines[0].split(',').map(h => h.trim());
-    return lines.slice(1).filter(l => l.trim()).map(line => {
-      const cells = line.split(',').map(c => c.trim());
+    const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
+    if (lines.length < 2) {
+      throw new Error('檔案內容是空的，或只有標題列沒有資料。');
+    }
+    const headers = splitCSVLine(lines[0]);
+    const missing = REQUIRED_HEADERS.filter(h => !headers.includes(h));
+    if (missing.length) {
+      throw new Error(
+        `找不到欄位：${missing.join('、')}。\n` +
+        `目前偵測到的欄位是：${headers.join('、')}\n` +
+        `必須包含：${REQUIRED_HEADERS.join('、')}`
+      );
+    }
+    return lines.slice(1).map(line => {
+      const cells = splitCSVLine(line);
       const row = {};
-      headers.forEach((h, i) => row[h] = cells[i]);
+      headers.forEach((h, i) => row[h] = cells[i] ?? '');
       return row;
     });
+  }
+
+  // 判斷解碼後的文字是否看起來像亂碼（大量 U+FFFD 取代字元，或幾乎沒有中文字）
+  function looksGarbled(text) {
+    const replacementCount = (text.match(/�/g) || []).length;
+    if (replacementCount > 0) return true;
+    const cjkCount = (text.match(/[一-鿿]/g) || []).length;
+    const hasAsciiLetters = /[A-Za-z]{3,}/.test(text.slice(0, 200));
+    return cjkCount === 0 && !hasAsciiLetters;
+  }
+
+  // 依序嘗試 UTF-8、Big5 解碼，挑第一個看起來正常的結果
+  // （Windows Excel「另存新檔→CSV」預設是 Big5，不是 UTF-8）
+  function decodeCSVBuffer(buffer) {
+    try {
+      const utf8Text = new TextDecoder('utf-8', { fatal: true }).decode(buffer);
+      if (!looksGarbled(utf8Text)) return utf8Text;
+    } catch (e) { /* not valid UTF-8, fall through */ }
+    try {
+      const big5Text = new TextDecoder('big5').decode(buffer);
+      if (!looksGarbled(big5Text)) return big5Text;
+    } catch (e) { /* browser may not support big5 decoder */ }
+    // 兩種都失敗，回傳寬鬆的 UTF-8 解碼結果，讓後續錯誤訊息至少看得出結構
+    return new TextDecoder('utf-8').decode(buffer);
   }
 
   function statusClass(status, rate) {
@@ -380,7 +454,12 @@
   }
 
   function render(rows) {
-    rows = rows.map(r => ({...r, 完成率: Number(r.完成率), 已售戶數: Number(r.已售戶數), 總戶數: Number(r.總戶數)}));
+    rows = rows
+      .map(r => ({...r, 完成率: Number(r.完成率), 已售戶數: Number(r.已售戶數), 總戶數: Number(r.總戶數)}))
+      .filter(r => r.案名 && !Number.isNaN(r.完成率));
+    if (!rows.length) {
+      throw new Error('資料列讀不到有效內容，請檢查「完成率」「已售戶數」「總戶數」是否都是數字。');
+    }
     rows.sort((a, b) => b.完成率 - a.完成率);
 
     document.getElementById('siteCount').textContent = rows.length + ' 個案場';
@@ -428,24 +507,39 @@
     }).join('');
   }
 
+  const errorBanner = document.getElementById('errorBanner');
+
+  function showError(msg) {
+    errorBanner.textContent = '⚠ 上傳失敗：' + msg;
+    errorBanner.hidden = false;
+  }
+  function clearError() {
+    errorBanner.hidden = true;
+    errorBanner.textContent = '';
+  }
+
   fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const rows = parseCSV(ev.target.result);
+        const text = decodeCSVBuffer(ev.target.result);
+        const rows = parseCSV(text);
         render(rows);
+        clearError();
         fileNameEl.textContent = '目前顯示：' + file.name;
       } catch (err) {
-        alert('CSV 解析失敗，請確認欄位格式是否正確。');
+        showError(err.message || String(err));
       }
     };
-    reader.readAsText(file, 'UTF-8');
+    reader.onerror = () => showError('檔案讀取失敗，請確認檔案沒有損壞。');
+    reader.readAsArrayBuffer(file);
   });
 
   resetBtn.addEventListener('click', () => {
     fileInput.value = '';
+    clearError();
     render(parseCSV(SAMPLE_CSV));
     fileNameEl.textContent = '目前顯示：示範資料';
   });
