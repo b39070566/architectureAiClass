@@ -359,6 +359,8 @@
   const resetBtn = document.getElementById('resetBtn');
 
   function parseCSV(text) {
+    // 去掉 UTF-8 BOM（Windows Excel／記事本存檔常見）
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
     const lines = text.trim().split(/\r?\n/);
     const headers = lines[0].split(',').map(h => h.trim());
     return lines.slice(1).filter(l => l.trim()).map(line => {
