@@ -10,19 +10,6 @@
     --brass: #96754a;
     --brass-2: #b99a6b;
 
-    --sc-sky-top: #93a6a4;
-    --sc-sky-bot: #e3ddcf;
-    --sc-sun: #fdf6e6;
-    --sc-ridge-far: #93a29e;
-    --sc-ridge-mid: #62756f;
-    --sc-ridge-near: #3f524c;
-    --sc-building: #26352f;
-    --sc-window: #f4dfb4;
-    --sc-water-top: #bfc5bd;
-    --sc-water-bot: #75837e;
-    --sc-fore: #1d2823;
-    --sc-mist: 255,255,255;
-
     --font-display: "Noto Serif TC", "Songti TC", "Source Han Serif TC", Georgia, "Microsoft JhengHei", "PingFang TC", serif;
     --font-body: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", -apple-system, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -38,40 +25,17 @@
       --rule: #2e3833;
       --brass: #c6a473;
       --brass-2: #dcc094;
-
-      --sc-sky-top: #16211f;
-      --sc-sky-bot: #3a4340;
-      --sc-sun: #c9ae7e;
-      --sc-ridge-far: #2e3b38;
-      --sc-ridge-mid: #24302d;
-      --sc-ridge-near: #1b2523;
-      --sc-building: #101817;
-      --sc-window: #e4be7e;
-      --sc-water-top: #2a3432;
-      --sc-water-bot: #151d1b;
-      --sc-fore: #0c1211;
-      --sc-mist: 190,205,200;
     }
   }
   :root[data-theme="dark"] {
     --paper: #141a17; --surface: #1b231f; --surface-a: rgba(27,35,31,0.82);
     --ink: #e8e6dd; --ink-2: #9aa69f; --rule: #2e3833;
     --brass: #c6a473; --brass-2: #dcc094;
-    --sc-sky-top: #16211f; --sc-sky-bot: #3a4340; --sc-sun: #c9ae7e;
-    --sc-ridge-far: #2e3b38; --sc-ridge-mid: #24302d; --sc-ridge-near: #1b2523;
-    --sc-building: #101817; --sc-window: #e4be7e;
-    --sc-water-top: #2a3432; --sc-water-bot: #151d1b; --sc-fore: #0c1211;
-    --sc-mist: 190,205,200;
   }
   :root[data-theme="light"] {
     --paper: #edebe4; --surface: #f7f6f1; --surface-a: rgba(247,246,241,0.82);
     --ink: #1b2e27; --ink-2: #5c6b63; --rule: #cfccc2;
     --brass: #96754a; --brass-2: #b99a6b;
-    --sc-sky-top: #93a6a4; --sc-sky-bot: #e3ddcf; --sc-sun: #fdf6e6;
-    --sc-ridge-far: #93a29e; --sc-ridge-mid: #62756f; --sc-ridge-near: #3f524c;
-    --sc-building: #26352f; --sc-window: #f4dfb4;
-    --sc-water-top: #bfc5bd; --sc-water-bot: #75837e; --sc-fore: #1d2823;
-    --sc-mist: 255,255,255;
   }
 
   * { box-sizing: border-box; }
@@ -100,10 +64,7 @@
     max-width: 1140px; margin: 0 auto; padding: 0 32px;
     height: 62px; display: flex; align-items: center; justify-content: space-between;
   }
-  .wordmark {
-    font-family: var(--font-display);
-    font-size: 19px; font-weight: 600; letter-spacing: 0.18em;
-  }
+  .wordmark { font-family: var(--font-display); font-size: 19px; font-weight: 600; letter-spacing: 0.18em; }
   .topbar nav { display: flex; gap: 30px; }
   .topbar nav a {
     font-size: 13px; color: var(--ink-2); text-decoration: none;
@@ -111,24 +72,30 @@
     border-bottom: 1px solid transparent;
     transition: color .25s, border-color .25s;
   }
-  .topbar nav a:hover, .topbar nav a:focus-visible {
-    color: var(--ink); border-bottom-color: var(--brass);
-  }
+  .topbar nav a:hover, .topbar nav a:focus-visible { color: var(--ink); border-bottom-color: var(--brass); }
 
-  /* ── 通用圖框 ── */
-  .figure { position: relative; overflow: hidden; background: var(--sc-sky-bot); }
-  .figure canvas, .figure .user-img {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    display: block; object-fit: cover;
+  /* ── 圖框：所有圖片都放在這個容器裡 ── */
+  .figure { position: relative; overflow: hidden; background: var(--rule); }
+  .figure img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
+  /* 圖片檔找不到時，顯示它預期的路徑，方便對照資料夾 */
+  .figure .missing {
+    position: absolute; inset: 0; display: none;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 20px; background: var(--surface); color: var(--ink-2);
+    font-family: var(--font-mono); font-size: 12px; line-height: 1.9;
   }
+  .figure.is-missing .missing { display: flex; }
+  .figure .missing b { color: var(--ink); font-weight: 600; }
 
-  /* ── Hero ── */
-  .hero { position: relative; height: clamp(460px, 68vh, 660px); overflow: hidden; }
+  /* ── Hero：照片＋底部深色漸層＋淺色標題
+       固定用這個組合，換成任何亮度的照片標題都讀得到 ── */
+  .hero { position: relative; height: clamp(460px, 68vh, 660px); overflow: hidden; background: #10130f; }
   .hero .figure { position: absolute; inset: 0; }
   .hero-scrim {
-    position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(to top, var(--paper) 0%, rgba(0,0,0,0) 30%);
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(to top,
+      rgba(10,13,11,0.86) 0%, rgba(10,13,11,0.62) 30%,
+      rgba(10,13,11,0.18) 58%, rgba(10,13,11,0) 80%);
   }
   .hero-copy {
     position: absolute; left: 0; right: 0; bottom: 46px; z-index: 2;
@@ -137,30 +104,19 @@
   .kicker {
     font-family: var(--font-mono);
     font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
-    color: var(--brass); margin: 0 0 14px;
+    color: #dcbe8c; margin: 0 0 14px;
   }
   .hero-copy h1 {
     font-family: var(--font-display);
     font-size: clamp(46px, 8vw, 82px);
-    font-weight: 600; margin: 0;
+    font-weight: 600; margin: 0; color: #f6f4ec;
     letter-spacing: 0.06em; line-height: 1.05;
     text-wrap: balance;
   }
   .hero-sub {
-    margin: 16px 0 0; font-size: 14.5px; color: var(--ink-2);
+    margin: 16px 0 0; font-size: 14.5px; color: rgba(246,244,236,0.88);
     letter-spacing: 0.03em; max-width: 30em;
   }
-  /* 逐字堆疊，不依賴 writing-mode 的字距行為（跨平台字體 fallback 會壞） */
-  .hero-vert {
-    position: absolute; top: 92px; right: 40px; z-index: 2;
-    display: flex; flex-direction: column; align-items: center; gap: 11px;
-    font-family: var(--font-display);
-    font-size: 17px; line-height: 1;
-    color: var(--ink);
-    padding: 22px 13px;
-    border-right: 1px solid var(--brass);
-  }
-  .hero-vert i { display: block; height: 16px; }
 
   /* ── 區塊節奏 ── */
   .band { padding: 92px 0; border-top: 1px solid var(--rule); }
@@ -172,16 +128,20 @@
   }
   .band h2 {
     font-family: var(--font-display);
-    font-size: 27px; font-weight: 600; letter-spacing: 0.08em;
-    margin: 0 0 34px;
+    font-size: 27px; font-weight: 600; letter-spacing: 0.08em; margin: 0 0 34px;
   }
 
   /* ── 理念 ── */
-  .concept-grid {
-    display: grid; grid-template-columns: 190px 1fr; gap: 48px; align-items: start;
-  }
+  .concept-grid { display: grid; grid-template-columns: 190px 1fr; gap: 48px; align-items: start; }
   .concept-side { padding-top: 6px; }
   .concept-side .rule { width: 46px; height: 1px; background: var(--brass); margin-top: 14px; }
+  /* 直排標語：逐字堆疊，不依賴 writing-mode 的字距行為 */
+  .vtag {
+    margin-top: 34px; display: inline-flex; flex-direction: column; align-items: center; gap: 11px;
+    font-family: var(--font-display); font-size: 16px; line-height: 1;
+    color: var(--ink-2); padding: 18px 12px; border-left: 1px solid var(--brass);
+  }
+  .vtag i { display: block; height: 15px; }
   .concept-body p {
     font-family: var(--font-display);
     font-size: 20px; line-height: 2; margin: 0 0 22px;
@@ -189,25 +149,18 @@
   }
   .concept-body p:last-child {
     font-family: var(--font-body);
-    font-size: 14.5px; line-height: 1.95; color: var(--ink-2);
-    letter-spacing: 0.02em;
+    font-size: 14.5px; line-height: 1.95; color: var(--ink-2); letter-spacing: 0.02em;
   }
 
   /* ── 特色 ── */
   .marks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
   .mark .hair { width: 34px; height: 1px; background: var(--brass); margin-bottom: 20px; }
-  .mark h3 {
-    font-family: var(--font-display);
-    font-size: 17px; font-weight: 600; letter-spacing: 0.06em; margin: 0 0 10px;
-  }
+  .mark h3 { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: 0.06em; margin: 0 0 10px; }
   .mark p { margin: 0; font-size: 13.5px; color: var(--ink-2); line-height: 1.9; }
 
   /* ── 格局表 ── */
   .schedule { width: 100%; border-collapse: collapse; }
-  .schedule caption {
-    text-align: left; font-size: 12.5px; color: var(--ink-2);
-    padding-bottom: 14px; letter-spacing: 0.02em;
-  }
+  .schedule caption { text-align: left; font-size: 12.5px; color: var(--ink-2); padding-bottom: 14px; letter-spacing: 0.02em; }
   .schedule th {
     text-align: left; font-family: var(--font-mono);
     font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
@@ -215,16 +168,12 @@
     border-bottom: 1px solid var(--ink); padding: 0 14px 11px 0;
   }
   .schedule th:last-child, .schedule td:last-child { text-align: right; padding-right: 0; }
-  .schedule td {
-    padding: 18px 14px 18px 0;
-    border-bottom: 1px solid var(--rule);
-    font-size: 14.5px;
-  }
+  .schedule td { padding: 18px 14px 18px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
   .schedule tbody tr:last-child td { border-bottom: none; }
   .schedule .unit { font-family: var(--font-display); letter-spacing: 0.04em; }
   .schedule .fig { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 13.5px; }
 
-  /* ── 圖輯 ── */
+  /* ── 內裝圖輯 ── */
   .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
   .gal-item { margin: 0; }
   .gal-item .figure { aspect-ratio: 4 / 5; }
@@ -243,10 +192,7 @@
   .access-list li { display: flex; align-items: baseline; gap: 12px; padding: 15px 0; border-bottom: 1px solid var(--rule); }
   .access-list .name { font-size: 14.5px; white-space: nowrap; }
   .access-list .lead { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-5px); }
-  .access-list .dist {
-    font-family: var(--font-mono); font-size: 12px; color: var(--ink-2);
-    font-variant-numeric: tabular-nums; white-space: nowrap;
-  }
+  .access-list .dist { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   /* ── 頁尾 ── */
   .foot { border-top: 1px solid var(--rule); padding: 62px 0 74px; }
@@ -279,8 +225,9 @@
     .gallery { grid-template-columns: 1fr; }
     .gal-item .figure { aspect-ratio: 16 / 10; }
     .access-list { grid-template-columns: 1fr; }
-    .hero-vert { display: none; }
     .topbar nav { gap: 18px; }
+    .vtag { flex-direction: row; border-left: none; border-top: 1px solid var(--brass); padding: 12px 0 0; margin-top: 22px; }
+    .vtag i { height: auto; width: 15px; }
   }
   @media (max-width: 620px) {
     .shell, .topbar-inner, .hero-copy { padding-left: 20px; padding-right: 20px; }
@@ -296,20 +243,18 @@
     <nav>
       <a href="#concept">建案理念</a>
       <a href="#plans">格局配置</a>
-      <a href="#gallery">環境圖輯</a>
+      <a href="#gallery">內裝圖輯</a>
       <a href="#access">生活機能</a>
     </nav>
   </div>
 </header>
 
 <section class="hero">
-  <div class="figure" data-slot="hero"><canvas class="scene" data-variant="0"></canvas></div>
-  <div class="hero-scrim"></div>
-  <div class="hero-vert" aria-label="依山面湖，日光入室">
-    <span>依</span><span>山</span><span>面</span><span>湖</span>
-    <i></i>
-    <span>日</span><span>光</span><span>入</span><span>室</span>
+  <div class="figure">
+    <img src="images/hero.jpg" alt="翠湖苑外觀，面湖而立的低層建築" />
+    <div class="missing"></div>
   </div>
+  <div class="hero-scrim"></div>
   <div class="hero-copy">
     <p class="kicker">Stage 01 · 資訊網站</p>
     <h1>翠湖苑</h1>
@@ -324,6 +269,11 @@
         <div class="concept-side">
           <p class="label">Concept</p>
           <div class="rule"></div>
+          <div class="vtag" aria-label="依山面湖，日光入室">
+            <span>依</span><span>山</span><span>面</span><span>湖</span>
+            <i></i>
+            <span>日</span><span>光</span><span>入</span><span>室</span>
+          </div>
         </div>
         <div class="concept-body">
           <p>把湖光留在客廳，把山線留在陽台。<br />建築退後，讓風景先進來。</p>
@@ -378,20 +328,29 @@
 
   <section class="band" id="gallery">
     <div class="shell">
-      <p class="label">Gallery</p>
-      <h2>環境圖輯</h2>
+      <p class="label">Interiors</p>
+      <h2>內裝圖輯</h2>
       <div class="gallery">
         <figure class="gal-item">
-          <div class="figure" data-slot="g1"><canvas class="scene" data-variant="1"></canvas></div>
-          <figcaption><b>湖畔晨景</b><span>01</span></figcaption>
+          <div class="figure">
+            <img src="images/interior-1.jpg" alt="客廳，大面開窗面向湖景" />
+            <div class="missing"></div>
+          </div>
+          <figcaption><b>客廳・面湖開窗</b><span>01</span></figcaption>
         </figure>
         <figure class="gal-item">
-          <div class="figure" data-slot="g2"><canvas class="scene" data-variant="2"></canvas></div>
-          <figcaption><b>環湖綠帶</b><span>02</span></figcaption>
+          <div class="figure">
+            <img src="images/interior-2.jpg" alt="主臥，側面採光" />
+            <div class="missing"></div>
+          </div>
+          <figcaption><b>主臥・側向採光</b><span>02</span></figcaption>
         </figure>
         <figure class="gal-item">
-          <div class="figure" data-slot="g3"><canvas class="scene" data-variant="3"></canvas></div>
-          <figcaption><b>遠山稜線</b><span>03</span></figcaption>
+          <div class="figure">
+            <img src="images/interior-3.jpg" alt="一樓大廳，挑高空間與垂直窗櫺" />
+            <div class="missing"></div>
+          </div>
+          <figcaption><b>一樓大廳・挑高六米</b><span>03</span></figcaption>
         </figure>
       </div>
     </div>
@@ -423,241 +382,31 @@
       </div>
       <a class="cta" href="#">預約賞屋</a>
     </div>
-    <p class="disclaimer">本頁為 vibe coding 課程 Stage 01 教材示例。建案、地址、聯絡資訊均為虛構，非真實銷售資訊；頁面中的環境影像由程式即時繪製，非實景照片。</p>
+    <p class="disclaimer">本頁為 vibe coding 課程 Stage 01 教材示例。建案、地址、聯絡資訊均為虛構，非真實銷售資訊；圖片為示意圖，非實景照片。</p>
   </div>
 </footer>
 
 <script>
-  /* 以種子亂數產生固定形狀，避免視窗縮放時山稜跳動 */
-  function seeded(seed) {
-    let a = seed;
-    return function () {
-      a |= 0; a = a + 0x6D2B79F5 | 0;
-      let t = Math.imul(a ^ a >>> 15, 1 | a);
-      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-      return ((t ^ t >>> 14) >>> 0) / 4294967296;
-    };
-  }
-
-  function sceneColors() {
-    const cs = getComputedStyle(document.documentElement);
-    const g = (n) => cs.getPropertyValue(n).trim();
-    return {
-      skyTop: g('--sc-sky-top'), skyBot: g('--sc-sky-bot'), sun: g('--sc-sun'),
-      ridgeFar: g('--sc-ridge-far'), ridgeMid: g('--sc-ridge-mid'), ridgeNear: g('--sc-ridge-near'),
-      building: g('--sc-building'), window: g('--sc-window'),
-      waterTop: g('--sc-water-top'), waterBot: g('--sc-water-bot'),
-      fore: g('--sc-fore'), mist: g('--sc-mist')
-    };
-  }
-
-  /* 依變體調整構圖：水平線高低、山稜起伏、是否出現建築量體 */
-  const VARIANTS = [
-    { seed: 7,  horizon: 0.62, amp: 0.11, building: true,  reeds: 0.5, sunX: 0.72, sunY: 0.30 },
-    { seed: 31, horizon: 0.56, amp: 0.08, building: true,  reeds: 0.9, sunX: 0.30, sunY: 0.26 },
-    { seed: 58, horizon: 0.70, amp: 0.06, building: false, reeds: 1.3, sunX: 0.58, sunY: 0.34 },
-    { seed: 92, horizon: 0.74, amp: 0.17, building: false, reeds: 0.3, sunX: 0.42, sunY: 0.22 }
-  ];
-
-  function ridgePath(ctx, w, baseY, amp, rnd, close) {
-    const p1 = rnd() * 6.283, p2 = rnd() * 6.283, p3 = rnd() * 6.283;
-    ctx.beginPath();
-    ctx.moveTo(0, baseY);
-    for (let x = 0; x <= w; x += 3) {
-      const t = x / w;
-      const y = baseY
-        + Math.sin(t * 3.1 + p1) * amp
-        + Math.sin(t * 7.3 + p2) * amp * 0.42
-        + Math.sin(t * 14.1 + p3) * amp * 0.16;
-      ctx.lineTo(x, y);
-    }
-    ctx.lineTo(w, close);
-    ctx.lineTo(0, close);
-    ctx.closePath();
-  }
-
-  function drawScene(canvas) {
-    const v = VARIANTS[Number(canvas.dataset.variant) || 0];
-    const c = sceneColors();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    if (!w || !h) return;
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    const ctx = canvas.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
-
-    const horizon = h * v.horizon;
-    const rnd = seeded(v.seed);
-
-    /* 天空 */
-    const sky = ctx.createLinearGradient(0, 0, 0, horizon);
-    sky.addColorStop(0, c.skyTop);
-    sky.addColorStop(1, c.skyBot);
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, w, horizon + 1);
-
-    /* 日暈 */
-    const sx = w * v.sunX, sy = horizon * v.sunY;
-    /* 大範圍柔暈 */
-    const haze = ctx.createRadialGradient(sx, sy, 0, sx, sy, Math.min(w, h) * 0.55);
-    haze.addColorStop(0, c.sun);
-    haze.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.globalAlpha = 0.34;
-    ctx.fillStyle = haze;
-    ctx.fillRect(0, 0, w, horizon + 1);
-    /* 小而亮的日輪 */
-    const disc = ctx.createRadialGradient(sx, sy, 0, sx, sy, Math.min(w, h) * 0.085);
-    disc.addColorStop(0, c.sun);
-    disc.addColorStop(0.55, c.sun);
-    disc.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.globalAlpha = 0.9;
-    ctx.fillStyle = disc;
-    ctx.fillRect(0, 0, w, horizon + 1);
-    ctx.globalAlpha = 1;
-
-    /* 三層山稜，越遠越淡 */
-    const ridges = [
-      { y: horizon - h * 0.16, amp: h * v.amp,        col: c.ridgeFar,  a: 0.62 },
-      { y: horizon - h * 0.075, amp: h * v.amp * 0.72, col: c.ridgeMid,  a: 0.82 },
-      { y: horizon - h * 0.015, amp: h * v.amp * 0.42, col: c.ridgeNear, a: 1 }
-    ];
-    ridges.forEach(function (r) {
-      ctx.globalAlpha = r.a;
-      ctx.fillStyle = r.col;
-      ridgePath(ctx, w, r.y, r.amp, rnd, horizon + 1);
-      ctx.fill();
+  /* 圖片檔載入失敗時，直接在畫面上寫出它要找的路徑，
+     學員一看就知道該把檔案放到哪、檔名要叫什麼 */
+  document.querySelectorAll('.figure img').forEach(function (img) {
+    img.addEventListener('error', function () {
+      var fig = img.closest('.figure');
+      var box = fig.querySelector('.missing');
+      var path = img.getAttribute('src');
+      if (box) box.innerHTML = '找不到圖片<br /><b>' + path + '</b><br />請確認檔案有放進 images 資料夾，檔名也一樣';
+      fig.classList.add('is-missing');
     });
-    ctx.globalAlpha = 1;
-
-    /* 遠岸建築量體：低層、水平分層，剪影感 */
-    if (v.building) {
-      const bw = w * 0.30, bh = h * 0.115;
-      const bx = w * 0.52, by = horizon - bh;
-      ctx.fillStyle = c.building;
-      ctx.fillRect(bx, by, bw, bh);
-      ctx.fillRect(bx + bw * 0.62, by - bh * 0.34, bw * 0.38, bh * 0.34);
-      /* 樓板水平線 */
-      ctx.strokeStyle = 'rgba(' + c.mist + ',0.16)';
-      ctx.lineWidth = 1;
-      for (let i = 1; i < 4; i++) {
-        const ly = by + (bh / 4) * i;
-        ctx.beginPath(); ctx.moveTo(bx, ly); ctx.lineTo(bx + bw, ly); ctx.stroke();
-      }
-      /* 暖色窗光 */
-      ctx.fillStyle = c.window;
-      for (let i = 0; i < 14; i++) {
-        if (rnd() > 0.55) continue;
-        const wx = bx + 4 + rnd() * (bw - 12);
-        const wy = by + 4 + Math.floor(rnd() * 4) * (bh / 4);
-        ctx.globalAlpha = 0.35 + rnd() * 0.45;
-        ctx.fillRect(wx, wy, 3.5, 2.5);
-      }
-      ctx.globalAlpha = 1;
-    }
-
-    /* 水面 */
-    const water = ctx.createLinearGradient(0, horizon, 0, h);
-    water.addColorStop(0, c.waterTop);
-    water.addColorStop(1, c.waterBot);
-    ctx.fillStyle = water;
-    ctx.fillRect(0, horizon, w, h - horizon);
-
-    /* 倒影：山稜鏡射後大幅淡化 */
-    ctx.save();
-    ctx.beginPath(); ctx.rect(0, horizon, w, h - horizon); ctx.clip();
-    ctx.translate(0, horizon * 2);
-    ctx.scale(1, -1);
-    const rnd2 = seeded(v.seed);
-    ridges.forEach(function (r) {
-      ctx.globalAlpha = r.a * 0.20;
-      ctx.fillStyle = r.col;
-      ridgePath(ctx, w, r.y, r.amp, rnd2, horizon + 1);
-      ctx.fill();
-    });
-    ctx.restore();
-    ctx.globalAlpha = 1;
-
-    /* 水面橫向波光 */
-    const rnd3 = seeded(v.seed + 5);
-    for (let i = 0; i < 46; i++) {
-      const y = horizon + rnd3() * (h - horizon);
-      const depth = (y - horizon) / (h - horizon);
-      const lw = w * (0.05 + rnd3() * 0.26) * (0.4 + depth);
-      const x = rnd3() * (w - lw);
-      ctx.globalAlpha = (0.05 + rnd3() * 0.11) * (1 - depth * 0.45);
-      ctx.fillStyle = 'rgb(' + c.mist + ')';
-      ctx.fillRect(x, y, lw, 1 + depth * 1.6);
-    }
-    ctx.globalAlpha = 1;
-
-    /* 水平線附近的霧帶 */
-    const mist = ctx.createLinearGradient(0, horizon - h * 0.10, 0, horizon + h * 0.05);
-    mist.addColorStop(0, 'rgba(' + c.mist + ',0)');
-    mist.addColorStop(0.5, 'rgba(' + c.mist + ',0.34)');
-    mist.addColorStop(1, 'rgba(' + c.mist + ',0)');
-    ctx.fillStyle = mist;
-    ctx.fillRect(0, horizon - h * 0.10, w, h * 0.15);
-
-    /* 前景水草剪影 */
-    if (v.reeds > 0) {
-      const rnd4 = seeded(v.seed + 11);
-      ctx.strokeStyle = c.fore;
-      ctx.lineCap = 'round';
-      const n = Math.round(26 * v.reeds);
-      for (let i = 0; i < n; i++) {
-        const x = rnd4() * w;
-        const len = h * (0.07 + rnd4() * 0.13) * v.reeds;
-        const lean = (rnd4() - 0.5) * len * 0.5;
-        ctx.globalAlpha = 0.5 + rnd4() * 0.5;
-        ctx.lineWidth = 1 + rnd4() * 1.4;
-        ctx.beginPath();
-        ctx.moveTo(x, h);
-        ctx.quadraticCurveTo(x + lean * 0.4, h - len * 0.6, x + lean, h - len);
-        ctx.stroke();
-      }
-      ctx.globalAlpha = 1;
-    }
-
-    /* 四角暗角，讓畫面收邊 */
-    const vig = ctx.createRadialGradient(w / 2, h * 0.46, Math.min(w, h) * 0.30,
-                                         w / 2, h * 0.46, Math.max(w, h) * 0.78);
-    vig.addColorStop(0, 'rgba(0,0,0,0)');
-    vig.addColorStop(1, 'rgba(0,0,0,0.20)');
-    ctx.fillStyle = vig;
-    ctx.fillRect(0, 0, w, h);
-  }
-
-  const scenes = Array.prototype.slice.call(document.querySelectorAll('canvas.scene'));
-  function drawAll() { scenes.forEach(drawScene); }
-  window.drawAllScenes = drawAll;
-
-  drawAll();
-
-  let resizeTimer;
-  window.addEventListener('resize', function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(drawAll, 160);
-  });
-
-  /* 跟著主題切換重繪 */
-  if (window.matchMedia) {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    if (mq.addEventListener) mq.addEventListener('change', drawAll);
-  }
-  new MutationObserver(drawAll).observe(document.documentElement, {
-    attributes: true, attributeFilter: ['data-theme']
   });
 
   /* 進場淡入 */
-  const targets = document.querySelectorAll('.band .shell > *, .foot-grid, .disclaimer');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var targets = document.querySelectorAll('.band .shell > *, .foot-grid, .disclaimer');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce || !('IntersectionObserver' in window)) {
     targets.forEach(function (el) { el.classList.add('in'); });
   } else {
     targets.forEach(function (el) { el.classList.add('reveal'); });
-    const io = new IntersectionObserver(function (entries) {
+    var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
       });

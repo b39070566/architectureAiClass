@@ -292,6 +292,7 @@
     line-height: 1.55;
   }
   .stage-foot strong { color: var(--ink); }
+  .stage-foot code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10.5px; background: var(--bg); border: 1px solid var(--line); padding: 0 4px; }
 
   /* 連接箭頭（僅桌面寬螢幕顯示，強調「這是流程」） */
   .arrow {
@@ -426,12 +427,12 @@
       <div class="stage-head">
         <div class="stage-no">STAGE 02</div>
         <h3>換成自己的圖片</h3>
-        <div class="skill">同一份網站，換上自己拍的照片</div>
+        <div class="skill">學會圖片檔怎麼跟網頁連結</div>
       </div>
       <div class="mock-browser">
         <div class="mock-chrome"><i></i><i></i><i></i><span class="url">翠湖苑・建案介紹</span></div>
         <div class="mock-scene scene-2">
-          <span class="swap-badge">自己的照片</span>
+          <span class="swap-badge">images/</span>
           <div class="hero"><span class="hero-title">翠湖苑</span></div>
           <div class="body">
             <div class="ln"></div>
@@ -440,7 +441,7 @@
           </div>
         </div>
       </div>
-      <div class="stage-foot"><strong>新能力：</strong>把「別人做的範例」變成「我自己的東西」——換上自己部門的照片，第一次產生擁有感。</div>
+      <div class="stage-foot"><strong>新能力：</strong>看懂 <code>src="images/hero.jpg"</code> 在講什麼——把照片放進資料夾就能換圖，不用等人幫忙。</div>
     </div>
 
     <!-- 階段 3 -->
@@ -522,7 +523,7 @@
           <tr>
             <td class="tag">STAGE 02</td>
             <td>同一網站・換上自己的照片</td>
-            <td>上傳檔案、瀏覽器端即時替換</td>
+            <td>檔案路徑：資料夾裡的圖怎麼跟網頁連起來</td>
             <td>「這是我的建案、我的照片」的擁有感</td>
           </tr>
           <tr>
