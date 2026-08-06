@@ -74,53 +74,52 @@
   }
   .topbar nav a:hover, .topbar nav a:focus-visible { color: var(--ink); border-bottom-color: var(--brass); }
 
-  /* ── 圖框：所有圖片都放在這個容器裡 ── */
-  .figure { position: relative; overflow: hidden; background: var(--rule); }
-  .figure img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
-  /* 圖片檔找不到時，顯示它預期的路徑，方便對照資料夾 */
-  .figure .missing {
-    position: absolute; inset: 0; display: none;
-    align-items: center; justify-content: center; text-align: center;
-    padding: 20px; background: var(--surface); color: var(--ink-2);
-    font-family: var(--font-mono); font-size: 12px; line-height: 1.9;
-  }
-  .figure.is-missing .missing { display: flex; }
-  .figure .missing b { color: var(--ink); font-weight: 600; }
-
-  /* ── Hero：照片＋底部深色漸層＋淺色標題
-       固定用這個組合，換成任何亮度的照片標題都讀得到 ── */
-  .hero { position: relative; height: clamp(460px, 68vh, 660px); overflow: hidden; background: #10130f; }
-  .hero .figure { position: absolute; inset: 0; }
-  .hero-scrim {
-    position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(to top,
-      rgba(10,13,11,0.86) 0%, rgba(10,13,11,0.62) 30%,
-      rgba(10,13,11,0.18) 58%, rgba(10,13,11,0) 80%);
-  }
-  .hero-copy {
-    position: absolute; left: 0; right: 0; bottom: 46px; z-index: 2;
-    max-width: 1140px; margin: 0 auto; padding: 0 32px;
-  }
-  .kicker {
+  /* ── 首屏 ── */
+  .hero { padding: 96px 0 62px; }
+  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: start; }
+  .eyebrow {
     font-family: var(--font-mono);
-    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
-    color: #dcbe8c; margin: 0 0 14px;
+    font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--brass); margin: 0 0 26px;
   }
-  .hero-copy h1 {
+  .hero h1 {
     font-family: var(--font-display);
-    font-size: clamp(46px, 8vw, 82px);
-    font-weight: 600; margin: 0; color: #f6f4ec;
-    letter-spacing: 0.06em; line-height: 1.05;
-    text-wrap: balance;
+    font-size: clamp(58px, 10vw, 108px);
+    font-weight: 600; margin: 0;
+    letter-spacing: 0.1em; line-height: 1;
   }
-  .hero-sub {
-    margin: 16px 0 0; font-size: 14.5px; color: rgba(246,244,236,0.88);
-    letter-spacing: 0.03em; max-width: 30em;
+  .hero .tagline {
+    font-family: var(--font-display);
+    font-size: clamp(19px, 2.4vw, 24px);
+    margin: 26px 0 0; letter-spacing: 0.14em; color: var(--ink-2);
+  }
+  .hero .lead {
+    margin: 34px 0 0; font-size: 15.5px; line-height: 2;
+    max-width: 30em; color: var(--ink-2);
+  }
+  /* 直排標語：逐字堆疊，不依賴 writing-mode 的字距行為 */
+  .vtag {
+    display: inline-flex; flex-direction: column; align-items: center; gap: 12px;
+    font-family: var(--font-display); font-size: 17px; line-height: 1;
+    color: var(--ink); padding: 22px 14px; border-left: 1px solid var(--brass);
+  }
+  .vtag i { display: block; height: 16px; }
+
+  .hero-meta {
+    margin-top: 62px; padding-top: 22px; border-top: 1px solid var(--ink);
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+  .hero-meta dt {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-2); margin-bottom: 7px;
+  }
+  .hero-meta dd {
+    margin: 0; font-family: var(--font-display);
+    font-size: 18px; letter-spacing: 0.05em;
   }
 
   /* ── 區塊節奏 ── */
   .band { padding: 92px 0; border-top: 1px solid var(--rule); }
-  .band:first-of-type { border-top: none; }
   .label {
     font-family: var(--font-mono);
     font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
@@ -133,15 +132,7 @@
 
   /* ── 理念 ── */
   .concept-grid { display: grid; grid-template-columns: 190px 1fr; gap: 48px; align-items: start; }
-  .concept-side { padding-top: 6px; }
   .concept-side .rule { width: 46px; height: 1px; background: var(--brass); margin-top: 14px; }
-  /* 直排標語：逐字堆疊，不依賴 writing-mode 的字距行為 */
-  .vtag {
-    margin-top: 34px; display: inline-flex; flex-direction: column; align-items: center; gap: 11px;
-    font-family: var(--font-display); font-size: 16px; line-height: 1;
-    color: var(--ink-2); padding: 18px 12px; border-left: 1px solid var(--brass);
-  }
-  .vtag i { display: block; height: 15px; }
   .concept-body p {
     font-family: var(--font-display);
     font-size: 20px; line-height: 2; margin: 0 0 22px;
@@ -173,25 +164,11 @@
   .schedule .unit { font-family: var(--font-display); letter-spacing: 0.04em; }
   .schedule .fig { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 13.5px; }
 
-  /* ── 內裝圖輯 ── */
-  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  .gal-item { margin: 0; }
-  .gal-item .figure { aspect-ratio: 4 / 5; }
-  .gal-item figcaption {
-    margin-top: 13px; display: flex; justify-content: space-between; align-items: baseline;
-    font-size: 12.5px; color: var(--ink-2); letter-spacing: 0.03em;
-  }
-  .gal-item figcaption b {
-    font-family: var(--font-display); font-weight: 600; font-size: 14px;
-    color: var(--ink); letter-spacing: 0.06em;
-  }
-  .gal-item figcaption span { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; }
-
   /* ── 生活機能：索引式點線 ── */
   .access-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; }
   .access-list li { display: flex; align-items: baseline; gap: 12px; padding: 15px 0; border-bottom: 1px solid var(--rule); }
   .access-list .name { font-size: 14.5px; white-space: nowrap; }
-  .access-list .lead { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-5px); }
+  .access-list .lead { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-5px); margin: 0; }
   .access-list .dist { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   /* ── 頁尾 ── */
@@ -220,17 +197,18 @@
   .reveal.in { opacity: 1; transform: none; }
 
   @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 30px; }
+    .vtag { flex-direction: row; border-left: none; border-top: 1px solid var(--brass); padding: 14px 0 0; }
+    .vtag i { height: auto; width: 16px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; gap: 22px; }
     .concept-grid { grid-template-columns: 1fr; gap: 22px; }
     .marks { grid-template-columns: 1fr; gap: 34px; }
-    .gallery { grid-template-columns: 1fr; }
-    .gal-item .figure { aspect-ratio: 16 / 10; }
     .access-list { grid-template-columns: 1fr; }
     .topbar nav { gap: 18px; }
-    .vtag { flex-direction: row; border-left: none; border-top: 1px solid var(--brass); padding: 12px 0 0; margin-top: 22px; }
-    .vtag i { height: auto; width: 15px; }
   }
   @media (max-width: 620px) {
-    .shell, .topbar-inner, .hero-copy { padding-left: 20px; padding-right: 20px; }
+    .shell, .topbar-inner { padding-left: 20px; padding-right: 20px; }
+    .hero { padding: 56px 0 40px; }
     .band { padding: 62px 0; }
     .topbar nav a:nth-child(n+3) { display: none; }
     .foot-grid { grid-template-columns: 1fr; align-items: start; }
@@ -243,22 +221,33 @@
     <nav>
       <a href="#concept">建案理念</a>
       <a href="#plans">格局配置</a>
-      <a href="#gallery">內裝圖輯</a>
       <a href="#access">生活機能</a>
+      <a href="#contact">聯絡我們</a>
     </nav>
   </div>
 </header>
 
 <section class="hero">
-  <div class="figure">
-    <img src="images/hero.jpg" alt="翠湖苑外觀，面湖而立的低層建築" />
-    <div class="missing"></div>
-  </div>
-  <div class="hero-scrim"></div>
-  <div class="hero-copy">
-    <p class="kicker">Stage 01 · 資訊網站</p>
-    <h1>翠湖苑</h1>
-    <p class="hero-sub">台中七期重劃區旁，一棟面湖而立的低層電梯宅。從基地座向到公共空間，以居住的尺度重新丈量。</p>
+  <div class="shell">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">台中 · 七期重劃區</p>
+        <h1>翠湖苑</h1>
+        <p class="tagline">依山面湖，日光入室</p>
+        <p class="lead">一棟面湖而立的低層電梯宅。從基地座向到公共空間，以居住的尺度重新丈量。</p>
+      </div>
+      <div class="vtag" aria-label="風景先進來">
+        <span>建</span><span>築</span><span>退</span><span>後</span>
+        <i></i>
+        <span>風</span><span>景</span><span>先</span><span>進</span><span>來</span>
+      </div>
+    </div>
+    <dl class="hero-meta">
+      <div><dt>基地位置</dt><dd>台中市西屯區</dd></div>
+      <div><dt>規模</dt><dd>地上 7 層</dd></div>
+      <div><dt>總戶數</dt><dd>180 戶</dd></div>
+      <div><dt>公設比</dt><dd>28%</dd></div>
+    </dl>
   </div>
 </section>
 
@@ -269,11 +258,6 @@
         <div class="concept-side">
           <p class="label">Concept</p>
           <div class="rule"></div>
-          <div class="vtag" aria-label="依山面湖，日光入室">
-            <span>依</span><span>山</span><span>面</span><span>湖</span>
-            <i></i>
-            <span>日</span><span>光</span><span>入</span><span>室</span>
-          </div>
         </div>
         <div class="concept-body">
           <p>把湖光留在客廳，把山線留在陽台。<br />建築退後，讓風景先進來。</p>
@@ -326,36 +310,6 @@
     </div>
   </section>
 
-  <section class="band" id="gallery">
-    <div class="shell">
-      <p class="label">Interiors</p>
-      <h2>內裝圖輯</h2>
-      <div class="gallery">
-        <figure class="gal-item">
-          <div class="figure">
-            <img src="images/interior-1.jpg" alt="客廳，大面開窗面向湖景" />
-            <div class="missing"></div>
-          </div>
-          <figcaption><b>客廳・面湖開窗</b><span>01</span></figcaption>
-        </figure>
-        <figure class="gal-item">
-          <div class="figure">
-            <img src="images/interior-2.jpg" alt="主臥，側面採光" />
-            <div class="missing"></div>
-          </div>
-          <figcaption><b>主臥・側向採光</b><span>02</span></figcaption>
-        </figure>
-        <figure class="gal-item">
-          <div class="figure">
-            <img src="images/interior-3.jpg" alt="一樓大廳，挑高空間與垂直窗櫺" />
-            <div class="missing"></div>
-          </div>
-          <figcaption><b>一樓大廳・挑高六米</b><span>03</span></figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
   <section class="band" id="access">
     <div class="shell">
       <p class="label">Neighborhood</p>
@@ -372,7 +326,7 @@
   </section>
 </main>
 
-<footer class="foot">
+<footer class="foot" id="contact">
   <div class="shell">
     <div class="foot-grid">
       <div>
@@ -382,25 +336,12 @@
       </div>
       <a class="cta" href="#">預約賞屋</a>
     </div>
-    <p class="disclaimer">本頁為 vibe coding 課程 Stage 01 教材示例。建案、地址、聯絡資訊均為虛構，非真實銷售資訊；圖片為示意圖，非實景照片。</p>
+    <p class="disclaimer">本頁建案名稱、地址與聯絡資訊均為虛構，非真實銷售資訊。</p>
   </div>
 </footer>
 
 <script>
-  /* 圖片檔載入失敗時，直接在畫面上寫出它要找的路徑，
-     學員一看就知道該把檔案放到哪、檔名要叫什麼 */
-  document.querySelectorAll('.figure img').forEach(function (img) {
-    img.addEventListener('error', function () {
-      var fig = img.closest('.figure');
-      var box = fig.querySelector('.missing');
-      var path = img.getAttribute('src');
-      if (box) box.innerHTML = '找不到圖片<br /><b>' + path + '</b><br />請確認檔案有放進 images 資料夾，檔名也一樣';
-      fig.classList.add('is-missing');
-    });
-  });
-
-  /* 進場淡入 */
-  var targets = document.querySelectorAll('.band .shell > *, .foot-grid, .disclaimer');
+  var targets = document.querySelectorAll('.hero .shell > *, .band .shell > *, .foot-grid, .disclaimer');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce || !('IntersectionObserver' in window)) {
     targets.forEach(function (el) { el.classList.add('in'); });

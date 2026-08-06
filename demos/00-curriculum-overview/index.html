@@ -228,26 +228,22 @@
   .mock-scene { height: 148px; position: relative; overflow: hidden; }
 
   /* stage 1: 資訊網站 */
-  .scene-1 { display: flex; flex-direction: column; }
-  .scene-1 .hero { height: 66px; background: linear-gradient(180deg, #b6c3c0, #ddd7c8); position: relative; }
-  .scene-1 .hero-title { position: absolute; left: 10px; bottom: 8px; color: #23241f; font-size: 11px; font-weight: 700; }
-  .scene-1 .body { padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; }
-  .scene-1 .ln { height: 5px; background: var(--line); width: 100%; }
-  .scene-1 .ln.short { width: 60%; }
+  .scene-1 { display: flex; flex-direction: column; padding: 14px 12px; gap: 6px; }
+  .scene-1 .big { font-size: 19px; font-weight: 700; letter-spacing: 0.08em; color: var(--ink); line-height: 1.1; }
+  .scene-1 .sub { font-size: 8px; color: var(--ink-dim); letter-spacing: 0.06em; margin-bottom: 3px; }
+  .scene-1 .hr { height: 1px; background: var(--ink); margin: 4px 0 3px; }
+  .scene-1 .ln { height: 4px; background: var(--line); width: 100%; }
+  .scene-1 .ln.short { width: 58%; }
 
   /* stage 2: 換圖片 */
   .scene-2 { display: flex; flex-direction: column; }
-  .scene-2 .hero { height: 66px; background: linear-gradient(140deg, #8a7f6d, #46403a); position: relative; }
-  .scene-2 .hero-title { position: absolute; left: 10px; bottom: 8px; color: #fff; font-size: 11px; font-weight: 700; }
+  .scene-2 .hero { height: 62px; background: linear-gradient(160deg, #9fb0ac, #46504b); position: relative; }
+  .scene-2 .hero-title { position: absolute; left: 10px; bottom: 7px; color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; }
   .scene-2 .body { padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; }
-  .scene-2 .ln { height: 5px; background: var(--line); width: 100%; }
-  .scene-2 .ln.short { width: 60%; }
-  .scene-2 .swap-badge {
-    position: absolute; top: 6px; right: 6px;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 8px; color: #fff; background: rgba(150,117,74,0.95);
-    padding: 2px 5px; letter-spacing: 0.03em;
-  }
+  .scene-2 .ln { height: 4px; background: var(--line); width: 100%; }
+  .scene-2 .ln.short { width: 58%; }
+  .scene-2 .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 3px; }
+  .scene-2 .thumbs span { aspect-ratio: 4/5; background: linear-gradient(165deg, #d9d3c6, #a9a396); display: block; }
 
   /* stage 3: 靜態儀表板 */
   .scene-3 { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
@@ -406,17 +402,18 @@
       <div class="stage-head">
         <div class="stage-no">STAGE 01</div>
         <h3>資訊網站</h3>
-        <div class="skill">從一段需求文字，生成單頁介紹網站</div>
+        <div class="skill">從一段需求文字，生成單頁介紹網站（純文字排版）</div>
       </div>
       <div class="mock-browser">
         <div class="mock-chrome"><i></i><i></i><i></i><span class="url">翠湖苑・建案介紹</span></div>
         <div class="mock-scene scene-1">
-          <div class="hero"><span class="hero-title">翠湖苑</span></div>
-          <div class="body">
-            <div class="ln"></div>
-            <div class="ln short"></div>
-            <div class="ln"></div>
-          </div>
+          <div class="sub">台中 · 七期重劃區</div>
+          <div class="big">翠湖苑</div>
+          <div class="hr"></div>
+          <div class="ln"></div>
+          <div class="ln short"></div>
+          <div class="ln"></div>
+          <div class="ln short"></div>
         </div>
       </div>
       <div class="stage-foot"><strong>新能力：</strong>學會怎麼把需求講清楚給AI（prompt），第一次看到「文字變成一個網頁」。</div>
@@ -426,22 +423,21 @@
     <div class="stage">
       <div class="stage-head">
         <div class="stage-no">STAGE 02</div>
-        <h3>換成自己的圖片</h3>
-        <div class="skill">學會圖片檔怎麼跟網頁連結</div>
+        <h3>加上自己的圖片</h3>
+        <div class="skill">把照片放進資料夾，跟網頁連起來</div>
       </div>
       <div class="mock-browser">
         <div class="mock-chrome"><i></i><i></i><i></i><span class="url">翠湖苑・建案介紹</span></div>
         <div class="mock-scene scene-2">
-          <span class="swap-badge">images/</span>
           <div class="hero"><span class="hero-title">翠湖苑</span></div>
           <div class="body">
             <div class="ln"></div>
             <div class="ln short"></div>
-            <div class="ln"></div>
+            <div class="thumbs"><span></span><span></span><span></span></div>
           </div>
         </div>
       </div>
-      <div class="stage-foot"><strong>新能力：</strong>看懂 <code>src="images/hero.jpg"</code> 在講什麼——把照片放進資料夾就能換圖，不用等人幫忙。</div>
+      <div class="stage-foot"><strong>新能力：</strong>看懂 <code>src="images/hero.jpg"</code> 在講什麼——網頁只記住圖片放在哪，換照片不用改網頁。</div>
     </div>
 
     <!-- 階段 3 -->
@@ -516,13 +512,13 @@
         <tbody>
           <tr>
             <td class="tag">STAGE 01</td>
-            <td>單頁資訊網站</td>
+            <td>單頁資訊網站（純文字）</td>
             <td>怎麼把需求講清楚給AI（prompt結構）</td>
             <td>「一段話變成一個網頁」的第一次震撼</td>
           </tr>
           <tr>
             <td class="tag">STAGE 02</td>
-            <td>同一網站・換上自己的照片</td>
+            <td>同一網站・加上自己的照片</td>
             <td>檔案路徑：資料夾裡的圖怎麼跟網頁連起來</td>
             <td>「這是我的建案、我的照片」的擁有感</td>
           </tr>

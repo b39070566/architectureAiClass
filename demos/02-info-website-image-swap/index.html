@@ -1,4 +1,4 @@
-<title>翠湖苑 · 換上自己的照片</title>
+<title>翠湖苑 · 建案介紹</title>
 <style>
   :root {
     --paper: #edebe4;
@@ -74,53 +74,52 @@
   }
   .topbar nav a:hover, .topbar nav a:focus-visible { color: var(--ink); border-bottom-color: var(--brass); }
 
-  /* ── 圖框：所有圖片都放在這個容器裡 ── */
-  .figure { position: relative; overflow: hidden; background: var(--rule); }
-  .figure img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
-  /* 圖片檔找不到時，顯示它預期的路徑，方便對照資料夾 */
-  .figure .missing {
-    position: absolute; inset: 0; display: none;
-    align-items: center; justify-content: center; text-align: center;
-    padding: 20px; background: var(--surface); color: var(--ink-2);
-    font-family: var(--font-mono); font-size: 12px; line-height: 1.9;
-  }
-  .figure.is-missing .missing { display: flex; }
-  .figure .missing b { color: var(--ink); font-weight: 600; }
-
-  /* ── Hero：照片＋底部深色漸層＋淺色標題
-       固定用這個組合，換成任何亮度的照片標題都讀得到 ── */
-  .hero { position: relative; height: clamp(460px, 68vh, 660px); overflow: hidden; background: #10130f; }
-  .hero .figure { position: absolute; inset: 0; }
-  .hero-scrim {
-    position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(to top,
-      rgba(10,13,11,0.86) 0%, rgba(10,13,11,0.62) 30%,
-      rgba(10,13,11,0.18) 58%, rgba(10,13,11,0) 80%);
-  }
-  .hero-copy {
-    position: absolute; left: 0; right: 0; bottom: 46px; z-index: 2;
-    max-width: 1140px; margin: 0 auto; padding: 0 32px;
-  }
-  .kicker {
+  /* ── 首屏 ── */
+  .hero { padding: 96px 0 62px; }
+  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: start; }
+  .eyebrow {
     font-family: var(--font-mono);
-    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
-    color: #dcbe8c; margin: 0 0 14px;
+    font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--brass); margin: 0 0 26px;
   }
-  .hero-copy h1 {
+  .hero h1 {
     font-family: var(--font-display);
-    font-size: clamp(46px, 8vw, 82px);
-    font-weight: 600; margin: 0; color: #f6f4ec;
-    letter-spacing: 0.06em; line-height: 1.05;
-    text-wrap: balance;
+    font-size: clamp(58px, 10vw, 108px);
+    font-weight: 600; margin: 0;
+    letter-spacing: 0.1em; line-height: 1;
   }
-  .hero-sub {
-    margin: 16px 0 0; font-size: 14.5px; color: rgba(246,244,236,0.88);
-    letter-spacing: 0.03em; max-width: 30em;
+  .hero .tagline {
+    font-family: var(--font-display);
+    font-size: clamp(19px, 2.4vw, 24px);
+    margin: 26px 0 0; letter-spacing: 0.14em; color: var(--ink-2);
+  }
+  .hero .lead {
+    margin: 34px 0 0; font-size: 15.5px; line-height: 2;
+    max-width: 30em; color: var(--ink-2);
+  }
+  /* 直排標語：逐字堆疊，不依賴 writing-mode 的字距行為 */
+  .vtag {
+    display: inline-flex; flex-direction: column; align-items: center; gap: 12px;
+    font-family: var(--font-display); font-size: 17px; line-height: 1;
+    color: var(--ink); padding: 22px 14px; border-left: 1px solid var(--brass);
+  }
+  .vtag i { display: block; height: 16px; }
+
+  .hero-meta {
+    margin-top: 62px; padding-top: 22px; border-top: 1px solid var(--ink);
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+  .hero-meta dt {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-2); margin-bottom: 7px;
+  }
+  .hero-meta dd {
+    margin: 0; font-family: var(--font-display);
+    font-size: 18px; letter-spacing: 0.05em;
   }
 
   /* ── 區塊節奏 ── */
   .band { padding: 92px 0; border-top: 1px solid var(--rule); }
-  .band:first-of-type { border-top: none; }
   .label {
     font-family: var(--font-mono);
     font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
@@ -133,15 +132,7 @@
 
   /* ── 理念 ── */
   .concept-grid { display: grid; grid-template-columns: 190px 1fr; gap: 48px; align-items: start; }
-  .concept-side { padding-top: 6px; }
   .concept-side .rule { width: 46px; height: 1px; background: var(--brass); margin-top: 14px; }
-  /* 直排標語：逐字堆疊，不依賴 writing-mode 的字距行為 */
-  .vtag {
-    margin-top: 34px; display: inline-flex; flex-direction: column; align-items: center; gap: 11px;
-    font-family: var(--font-display); font-size: 16px; line-height: 1;
-    color: var(--ink-2); padding: 18px 12px; border-left: 1px solid var(--brass);
-  }
-  .vtag i { display: block; height: 15px; }
   .concept-body p {
     font-family: var(--font-display);
     font-size: 20px; line-height: 2; margin: 0 0 22px;
@@ -173,25 +164,11 @@
   .schedule .unit { font-family: var(--font-display); letter-spacing: 0.04em; }
   .schedule .fig { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 13.5px; }
 
-  /* ── 內裝圖輯 ── */
-  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  .gal-item { margin: 0; }
-  .gal-item .figure { aspect-ratio: 4 / 5; }
-  .gal-item figcaption {
-    margin-top: 13px; display: flex; justify-content: space-between; align-items: baseline;
-    font-size: 12.5px; color: var(--ink-2); letter-spacing: 0.03em;
-  }
-  .gal-item figcaption b {
-    font-family: var(--font-display); font-weight: 600; font-size: 14px;
-    color: var(--ink); letter-spacing: 0.06em;
-  }
-  .gal-item figcaption span { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; }
-
   /* ── 生活機能：索引式點線 ── */
   .access-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; }
   .access-list li { display: flex; align-items: baseline; gap: 12px; padding: 15px 0; border-bottom: 1px solid var(--rule); }
   .access-list .name { font-size: 14.5px; white-space: nowrap; }
-  .access-list .lead { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-5px); }
+  .access-list .lead { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-5px); margin: 0; }
   .access-list .dist { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   /* ── 頁尾 ── */
@@ -212,77 +189,43 @@
   }
 
 
-  /* ── 教學條與教學面板（Stage 02 新增，非網站內容） ── */
-  .teachbar { background: var(--ink); color: var(--paper); border-bottom: 2px solid var(--brass); }
-  .teachbar-inner {
-    max-width: 1140px; margin: 0 auto; padding: 12px 32px;
-    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    font-size: 12.5px; letter-spacing: 0.02em;
+  /* ── 首圖：照片版 ── */
+  .hero-photo { position: relative; overflow: hidden; background: #10130f; padding: 128px 0 66px; }
+  .hero-photo .hero-bg { position: absolute; inset: 0; }
+  .hero-photo .hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-photo .hero-scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top,
+      rgba(10,13,11,0.90) 0%, rgba(10,13,11,0.66) 55%, rgba(10,13,11,0.42) 100%);
   }
-  .teachbar b { color: var(--brass-2); font-weight: 600; }
-  .teachbar a { color: var(--brass-2); }
+  .hero-photo .shell { position: relative; z-index: 2; }
+  .hero-photo .eyebrow { color: #dcbe8c; }
+  .hero-photo h1 { color: #f6f4ec; }
+  .hero-photo .tagline, .hero-photo .lead { color: rgba(246,244,236,0.86); }
+  .hero-photo .vtag { color: #f6f4ec; border-left-color: var(--brass-2); }
+  .hero-photo .hero-meta { border-top-color: rgba(246,244,236,0.46); }
+  .hero-photo .hero-meta dt { color: rgba(246,244,236,0.66); }
+  .hero-photo .hero-meta dd { color: #f6f4ec; }
 
-  /* 圖片上的檔名標籤：一眼看出哪張圖對應哪個檔案 */
-  .filetag {
-    position: absolute; left: 10px; bottom: 10px; z-index: 3;
-    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em;
-    background: rgba(12,16,14,0.78); color: #f2efe6;
-    border-left: 3px solid var(--brass-2);
-    padding: 5px 10px; pointer-events: none;
+  /* ── 內裝圖輯 ── */
+  .figure { position: relative; overflow: hidden; background: var(--rule); }
+  .figure img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .gal-item { margin: 0; }
+  .gal-item .figure { aspect-ratio: 4 / 5; }
+  .gal-item figcaption {
+    margin-top: 13px; display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 12.5px; color: var(--ink-2); letter-spacing: 0.03em;
   }
-  .hero .filetag { left: 32px; bottom: 32px; }
-
-  .lesson { background: var(--surface); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 74px 0; }
-  .lesson-label {
-    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--brass); margin: 0 0 6px;
+  .gal-item figcaption b {
+    font-family: var(--font-display); font-weight: 600; font-size: 14px;
+    color: var(--ink); letter-spacing: 0.06em;
   }
-  .lesson h2 {
-    font-family: var(--font-display); font-size: 26px; font-weight: 600;
-    letter-spacing: 0.06em; margin: 0 0 12px;
-  }
-  .lesson-lead { margin: 0 0 40px; font-size: 15px; color: var(--ink-2); max-width: 40em; }
-  .lesson-lead b { color: var(--ink); }
-  .lesson h3 {
-    font-family: var(--font-display); font-size: 16px; font-weight: 600;
-    letter-spacing: 0.05em; margin: 0 0 14px;
-    padding-bottom: 8px; border-bottom: 1px solid var(--rule);
-  }
-  .lesson p { font-size: 14px; line-height: 1.95; margin: 0 0 12px; }
-  .lesson-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; margin-bottom: 46px; }
-  .lesson pre {
-    font-family: var(--font-mono); font-size: 12.5px; line-height: 1.85;
-    background: var(--paper); border: 1px solid var(--rule);
-    padding: 16px 18px; margin: 0 0 14px; overflow-x: auto;
-  }
-  .lesson code {
-    font-family: var(--font-mono); font-size: 0.92em;
-    background: var(--paper); border: 1px solid var(--rule);
-    padding: 1px 6px;
-  }
-  .lesson pre code { border: none; background: none; padding: 0; }
-  .lesson .hi { color: var(--brass); font-weight: 700; }
-  .lesson-steps { counter-reset: step; list-style: none; margin: 0 0 46px; padding: 0; display: grid; gap: 18px; }
-  .lesson-steps li {
-    counter-increment: step; position: relative;
-    padding: 18px 20px 18px 60px;
-    background: var(--paper); border: 1px solid var(--rule);
-    font-size: 14px; line-height: 1.9;
-  }
-  .lesson-steps li::before {
-    content: counter(step); position: absolute; left: 20px; top: 17px;
-    font-family: var(--font-mono); font-size: 12px; font-weight: 700;
-    color: var(--brass); border: 1px solid var(--brass);
-    width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
-  }
-  .lesson-steps b { font-weight: 600; }
-  .faq { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
-  .faq li { padding: 15px 0; border-bottom: 1px solid var(--rule); font-size: 14px; line-height: 1.9; }
-  .faq li:last-child { border-bottom: none; }
-  .faq b { display: block; font-weight: 600; margin-bottom: 2px; }
+  .gal-item figcaption span { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; }
   @media (max-width: 900px) {
-    .lesson-grid { grid-template-columns: 1fr; gap: 34px; }
-    .hero .filetag { left: 20px; bottom: 20px; }
+    .gallery { grid-template-columns: 1fr; }
+    .gal-item .figure { aspect-ratio: 16 / 10; }
+    .hero-photo { padding: 84px 0 50px; }
   }
 
   :focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
@@ -294,132 +237,60 @@
   .reveal.in { opacity: 1; transform: none; }
 
   @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 30px; }
+    .vtag { flex-direction: row; border-left: none; border-top: 1px solid var(--brass); padding: 14px 0 0; }
+    .vtag i { height: auto; width: 16px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; gap: 22px; }
     .concept-grid { grid-template-columns: 1fr; gap: 22px; }
     .marks { grid-template-columns: 1fr; gap: 34px; }
-    .gallery { grid-template-columns: 1fr; }
-    .gal-item .figure { aspect-ratio: 16 / 10; }
     .access-list { grid-template-columns: 1fr; }
     .topbar nav { gap: 18px; }
-    .vtag { flex-direction: row; border-left: none; border-top: 1px solid var(--brass); padding: 12px 0 0; margin-top: 22px; }
-    .vtag i { height: auto; width: 15px; }
   }
   @media (max-width: 620px) {
-    .shell, .topbar-inner, .hero-copy { padding-left: 20px; padding-right: 20px; }
+    .shell, .topbar-inner { padding-left: 20px; padding-right: 20px; }
+    .hero { padding: 56px 0 40px; }
     .band { padding: 62px 0; }
     .topbar nav a:nth-child(n+3) { display: none; }
     .foot-grid { grid-template-columns: 1fr; align-items: start; }
   }
 </style>
 
-<div class="teachbar">
-  <div class="teachbar-inner">
-    <span><b>STAGE 02 教學版：</b>這頁跟 Stage 01 是同一份網站，圖片也一樣——
-    差別是這頁會教你怎麼把它們換成你自己拍的照片。</span>
-    <a href="#lesson">看說明 ↓</a>
-  </div>
-</div>
-
 <header class="topbar">
   <div class="topbar-inner">
     <span class="wordmark">翠湖苑</span>
     <nav>
-      <a href="#lesson">換圖說明</a>
       <a href="#concept">建案理念</a>
       <a href="#plans">格局配置</a>
       <a href="#gallery">內裝圖輯</a>
       <a href="#access">生活機能</a>
+      <a href="#contact">聯絡我們</a>
     </nav>
   </div>
 </header>
 
-<section class="hero">
-  <div class="figure">
-    <img src="images/hero.jpg" alt="翠湖苑外觀，面湖而立的低層建築" />
-    <div class="missing"></div>
-  </div>
+<section class="hero hero-photo">
+  <div class="hero-bg"><img src="images/hero.jpg" alt="翠湖苑外觀，面湖而立的低層建築" /></div>
   <div class="hero-scrim"></div>
-  <div class="hero-copy">
-    <p class="kicker">Stage 02 · 換上自己的照片</p>
-    <h1>翠湖苑</h1>
-    <p class="hero-sub">台中七期重劃區旁，一棟面湖而立的低層電梯宅。從基地座向到公共空間，以居住的尺度重新丈量。</p>
-  </div>
-</section>
-
-
-<section class="lesson" id="lesson">
   <div class="shell">
-    <p class="lesson-label">Stage 02 · 課堂說明</p>
-    <h2>把你自己的照片放上這個網站</h2>
-    <p class="lesson-lead">
-      網頁本身<b>不會把圖片存在裡面</b>。它只記住一件事：這張圖放在哪個資料夾、叫什麼名字。
-      所以換照片不用改網頁——把檔案換掉就好。
-    </p>
-
-    <div class="lesson-grid">
+    <div class="hero-grid">
       <div>
-        <h3>一、先看資料夾長什麼樣</h3>
-        <pre>02-info-website-image-swap/
-├── index.html            ← 網頁本身
-└── images/               ← 圖片資料夾
-    ├── <span class="hi">hero.jpg</span>          ← 首圖
-    ├── <span class="hi">interior-1.jpg</span>    ← 客廳
-    ├── <span class="hi">interior-2.jpg</span>    ← 主臥
-    └── <span class="hi">interior-3.jpg</span>    ← 大廳</pre>
-        <p>網頁上每張圖的左下角都標了它對應的檔名，可以邊看畫面邊對照這棵樹。</p>
+        <p class="eyebrow">台中 · 七期重劃區</p>
+        <h1>翠湖苑</h1>
+        <p class="tagline">依山面湖，日光入室</p>
+        <p class="lead">一棟面湖而立的低層電梯宅。從基地座向到公共空間，以居住的尺度重新丈量。</p>
       </div>
-      <div>
-        <h3>二、網頁裡是這樣寫的</h3>
-        <pre>&lt;img src="<span class="hi">images/hero.jpg</span>" /&gt;</pre>
-        <p>
-          <code>src</code> 的意思就是「這張圖在哪裡」。<br />
-          <code>images/hero.jpg</code> 讀作：跟 <code>index.html</code> <b>放在同一層</b>的
-          <code>images</code> 資料夾裡，有個叫 <code>hero.jpg</code> 的檔案。
-        </p>
-        <p>
-          所以只要那個位置有一個叫這個名字的圖檔，網頁就會把它顯示出來——
-          至於那張圖是湖景還是你昨天在工地拍的，網頁不在意。
-        </p>
+      <div class="vtag" aria-label="風景先進來">
+        <span>建</span><span>築</span><span>退</span><span>後</span>
+        <i></i>
+        <span>風</span><span>景</span><span>先</span><span>進</span><span>來</span>
       </div>
     </div>
-
-    <h3>三、換成自己的照片，兩種做法</h3>
-    <ol class="lesson-steps">
-      <li>
-        <b>做法一：改檔名（最簡單，不用碰程式碼）</b><br />
-        把你的照片改名成 <code>hero.jpg</code>，複製進 <code>images</code> 資料夾蓋掉原本那張，
-        回到瀏覽器按重新整理，首圖就換好了。其他三張同理。
-      </li>
-      <li>
-        <b>做法二：改網頁裡的檔名（照片多的時候比較方便）</b><br />
-        把照片直接放進 <code>images</code> 資料夾不改名，例如 <code>工地實景.jpg</code>，
-        然後把 <code>index.html</code> 裡的 <code>src="images/hero.jpg"</code>
-        改成 <code>src="images/工地實景.jpg"</code>。
-      </li>
-      <li>
-        <b>不會改程式碼？把需求講給 AI 聽就好</b><br />
-        「我把照片放進 images 資料夾了，檔名是 工地實景.jpg，請幫我把首圖換成這張」——
-        這樣描述，AI 就能告訴你要改哪一行。這也是這門課一直在練的事：
-        <b>講清楚你要什麼，比自己寫程式重要</b>。
-      </li>
-    </ol>
-
-    <h3>四、圖片破掉的話，先檢查這三件事</h3>
-    <ul class="faq">
-      <li>
-        <b>檔名有沒有完全一樣？</b>
-        <code>Hero.jpg</code> 和 <code>hero.jpg</code> 在某些情況下算不同的檔案，大小寫要對。
-      </li>
-      <li>
-        <b>副檔名對不對？</b>
-        手機拍的照片有時是 <code>.jpeg</code> 或 <code>.HEIC</code>，不是 <code>.jpg</code>。
-        副檔名不同就要改網頁裡的 <code>src</code>，或把檔案轉存成 jpg。
-      </li>
-      <li>
-        <b>檔案真的放進 images 資料夾了嗎？</b>
-        放在外面、或多包了一層資料夾都會找不到。這頁做了提示：如果圖片載入失敗，
-        畫面上會直接寫出它在找哪個路徑。
-      </li>
-    </ul>
+    <dl class="hero-meta">
+      <div><dt>基地位置</dt><dd>台中市西屯區</dd></div>
+      <div><dt>規模</dt><dd>地上 7 層</dd></div>
+      <div><dt>總戶數</dt><dd>180 戶</dd></div>
+      <div><dt>公設比</dt><dd>28%</dd></div>
+    </dl>
   </div>
 </section>
 
@@ -430,11 +301,6 @@
         <div class="concept-side">
           <p class="label">Concept</p>
           <div class="rule"></div>
-          <div class="vtag" aria-label="依山面湖，日光入室">
-            <span>依</span><span>山</span><span>面</span><span>湖</span>
-            <i></i>
-            <span>日</span><span>光</span><span>入</span><span>室</span>
-          </div>
         </div>
         <div class="concept-body">
           <p>把湖光留在客廳，把山線留在陽台。<br />建築退後，讓風景先進來。</p>
@@ -493,24 +359,15 @@
       <h2>內裝圖輯</h2>
       <div class="gallery">
         <figure class="gal-item">
-          <div class="figure">
-            <img src="images/interior-1.jpg" alt="客廳，大面開窗面向湖景" />
-            <div class="missing"></div>
-          </div>
+          <div class="figure"><img src="images/interior-1.jpg" alt="客廳，大面開窗面向湖景" /></div>
           <figcaption><b>客廳・面湖開窗</b><span>01</span></figcaption>
         </figure>
         <figure class="gal-item">
-          <div class="figure">
-            <img src="images/interior-2.jpg" alt="主臥，側面採光" />
-            <div class="missing"></div>
-          </div>
+          <div class="figure"><img src="images/interior-2.jpg" alt="主臥，側面採光" /></div>
           <figcaption><b>主臥・側向採光</b><span>02</span></figcaption>
         </figure>
         <figure class="gal-item">
-          <div class="figure">
-            <img src="images/interior-3.jpg" alt="一樓大廳，挑高空間與垂直窗櫺" />
-            <div class="missing"></div>
-          </div>
+          <div class="figure"><img src="images/interior-3.jpg" alt="一樓大廳，挑高空間與垂直窗櫺" /></div>
           <figcaption><b>一樓大廳・挑高六米</b><span>03</span></figcaption>
         </figure>
       </div>
@@ -533,7 +390,7 @@
   </section>
 </main>
 
-<footer class="foot">
+<footer class="foot" id="contact">
   <div class="shell">
     <div class="foot-grid">
       <div>
@@ -543,25 +400,12 @@
       </div>
       <a class="cta" href="#">預約賞屋</a>
     </div>
-    <p class="disclaimer">本頁為 vibe coding 課程 Stage 02 教材示例。建案、地址、聯絡資訊均為虛構，非真實銷售資訊；圖片為示意圖，非實景照片。</p>
+    <p class="disclaimer">本頁建案名稱、地址與聯絡資訊均為虛構，非真實銷售資訊。</p>
   </div>
 </footer>
 
 <script>
-  /* 圖片檔載入失敗時，直接在畫面上寫出它要找的路徑，
-     學員一看就知道該把檔案放到哪、檔名要叫什麼 */
-  document.querySelectorAll('.figure img').forEach(function (img) {
-    img.addEventListener('error', function () {
-      var fig = img.closest('.figure');
-      var box = fig.querySelector('.missing');
-      var path = img.getAttribute('src');
-      if (box) box.innerHTML = '找不到圖片<br /><b>' + path + '</b><br />請確認檔案有放進 images 資料夾，檔名也一樣';
-      fig.classList.add('is-missing');
-    });
-  });
-
-  /* 進場淡入 */
-  var targets = document.querySelectorAll('.band .shell > *, .foot-grid, .disclaimer');
+  var targets = document.querySelectorAll('.hero .shell > *, .band .shell > *, .foot-grid, .disclaimer');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce || !('IntersectionObserver' in window)) {
     targets.forEach(function (el) { el.classList.add('in'); });
@@ -574,12 +418,4 @@
     }, { rootMargin: '0px 0px -12% 0px' });
     targets.forEach(function (el) { io.observe(el); });
   }
-
-  /* 在每張圖左下角標出它的檔名，方便對照 images 資料夾 */
-  document.querySelectorAll('.figure img').forEach(function (img) {
-    var tag = document.createElement('span');
-    tag.className = 'filetag';
-    tag.textContent = img.getAttribute('src');
-    img.closest('.figure').appendChild(tag);
-  });
 </script>
