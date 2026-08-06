@@ -6,15 +6,15 @@
   }
 
   :root {
-    --bg: #f2f1ec;
-    --bg-panel: #ffffff;
-    --ink: #14140f;
-    --ink-dim: #6f6c60;
-    --line: #d6d2c4;
-    --line-strong: #14140f;
+    --bg: #e6eaec;
+    --bg-panel: #f7fafb;
+    --ink: #101619;
+    --ink-dim: #5c666d;
+    --line: #c5ccd1;
+    --line-strong: #101619;
     --accent: #1c4d78;
-    --accent-soft: #e4ecf2;
-    --grid: rgba(20,20,15,0.05);
+    --accent-soft: #dae5ee;
+    --grid: rgba(16,22,25,0.055);
     /* 四階段的漸進色階：從淡到滿，編碼「累積難度」 */
     --s1: #a9c2d6;
     --s2: #6f9bbd;
@@ -24,15 +24,15 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #131311;
-      --bg-panel: #1b1b17;
-      --ink: #ece9de;
-      --ink-dim: #9d9a8c;
-      --line: #35342b;
-      --line-strong: #ece9de;
+      --bg: #0f1214;
+      --bg-panel: #171b1e;
+      --ink: #e6eaec;
+      --ink-dim: #919aa0;
+      --line: #2a3135;
+      --line-strong: #e6eaec;
       --accent: #6fa8d8;
       --accent-soft: #1f2c37;
-      --grid: rgba(236,233,222,0.05);
+      --grid: rgba(230,234,236,0.05);
       --s1: #37536a;
       --s2: #3f6c8c;
       --s3: #5089b3;
@@ -40,15 +40,15 @@
     }
   }
   :root[data-theme="dark"] {
-    --bg: #131311; --bg-panel: #1b1b17; --ink: #ece9de; --ink-dim: #9d9a8c;
-    --line: #35342b; --line-strong: #ece9de; --accent: #6fa8d8; --accent-soft: #1f2c37;
-    --grid: rgba(236,233,222,0.05);
+    --bg: #0f1214; --bg-panel: #171b1e; --ink: #e6eaec; --ink-dim: #919aa0;
+    --line: #2a3135; --line-strong: #e6eaec; --accent: #6fa8d8; --accent-soft: #1f2c37;
+    --grid: rgba(230,234,236,0.05);
     --s1: #37536a; --s2: #3f6c8c; --s3: #5089b3; --s4: #6fa8d8;
   }
   :root[data-theme="light"] {
-    --bg: #f2f1ec; --bg-panel: #ffffff; --ink: #14140f; --ink-dim: #6f6c60;
-    --line: #d6d2c4; --line-strong: #14140f; --accent: #1c4d78; --accent-soft: #e4ecf2;
-    --grid: rgba(20,20,15,0.05);
+    --bg: #e6eaec; --bg-panel: #f7fafb; --ink: #101619; --ink-dim: #5c666d;
+    --line: #c5ccd1; --line-strong: #101619; --accent: #1c4d78; --accent-soft: #dae5ee;
+    --grid: rgba(16,22,25,0.055);
     --s1: #a9c2d6; --s2: #6f9bbd; --s3: #3c74a0; --s4: #1c4d78;
   }
 
@@ -237,13 +237,13 @@
 
   /* stage 2: 換圖片 */
   .scene-2 { display: flex; flex-direction: column; }
-  .scene-2 .hero { height: 62px; background: linear-gradient(160deg, #9fb0ac, #46504b); position: relative; }
+  .scene-2 .hero { height: 62px; background: linear-gradient(160deg, #9cacaf, #3f4a4c); position: relative; }
   .scene-2 .hero-title { position: absolute; left: 10px; bottom: 7px; color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; }
   .scene-2 .body { padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; }
   .scene-2 .ln { height: 4px; background: var(--line); width: 100%; }
   .scene-2 .ln.short { width: 58%; }
   .scene-2 .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 3px; }
-  .scene-2 .thumbs span { aspect-ratio: 4/5; background: linear-gradient(165deg, #d9d3c6, #a9a396); display: block; }
+  .scene-2 .thumbs span { aspect-ratio: 4/5; background: linear-gradient(165deg, #d4d9d8, #a1a9a9); display: block; }
 
   /* stage 3: 靜態儀表板 */
   .scene-3 { padding: 8px; display: flex; flex-direction: column; gap: 6px; }

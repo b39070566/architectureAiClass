@@ -6,31 +6,31 @@
   }
 
   :root {
-    --bg: #f2f1ec;
-    --bg-panel: #ffffff;
-    --ink: #14140f;
-    --ink-dim: #6f6c60;
-    --line: #d6d2c4;
-    --line-strong: #14140f;
+    --bg: #e6eaec;
+    --bg-panel: #f7fafb;
+    --ink: #101619;
+    --ink-dim: #5c666d;
+    --line: #c5ccd1;
+    --line-strong: #101619;
     --accent: #1c4d78;
-    --accent-soft: #e4ecf2;
+    --accent-soft: #dae5ee;
     --good: #3a7d44;
-    --good-soft: #e5f0e3;
+    --good-soft: #e1efe3;
     --warn: #a8721c;
-    --warn-soft: #f5ecd8;
+    --warn-soft: #f3ead6;
     --crit: #a8352c;
-    --crit-soft: #f5e2df;
-    --grid: rgba(20,20,15,0.05);
+    --crit-soft: #f4e1de;
+    --grid: rgba(16,22,25,0.055);
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #131311;
-      --bg-panel: #1b1b17;
-      --ink: #ece9de;
-      --ink-dim: #9d9a8c;
-      --line: #35342b;
-      --line-strong: #ece9de;
+      --bg: #0f1214;
+      --bg-panel: #171b1e;
+      --ink: #e6eaec;
+      --ink-dim: #919aa0;
+      --line: #2a3135;
+      --line-strong: #e6eaec;
       --accent: #6fa8d8;
       --accent-soft: #1f2c37;
       --good: #7fbf88;
@@ -39,20 +39,20 @@
       --warn-soft: #362c1c;
       --crit: #df8378;
       --crit-soft: #382320;
-      --grid: rgba(236,233,222,0.05);
+      --grid: rgba(230,234,236,0.05);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #131311; --bg-panel: #1b1b17; --ink: #ece9de; --ink-dim: #9d9a8c;
-    --line: #35342b; --line-strong: #ece9de; --accent: #6fa8d8; --accent-soft: #1f2c37;
+    --bg: #0f1214; --bg-panel: #171b1e; --ink: #e6eaec; --ink-dim: #919aa0;
+    --line: #2a3135; --line-strong: #e6eaec; --accent: #6fa8d8; --accent-soft: #1f2c37;
     --good: #7fbf88; --good-soft: #223024; --warn: #d9a54a; --warn-soft: #362c1c;
-    --crit: #df8378; --crit-soft: #382320; --grid: rgba(236,233,222,0.05);
+    --crit: #df8378; --crit-soft: #382320; --grid: rgba(230,234,236,0.05);
   }
   :root[data-theme="light"] {
-    --bg: #f2f1ec; --bg-panel: #ffffff; --ink: #14140f; --ink-dim: #6f6c60;
-    --line: #d6d2c4; --line-strong: #14140f; --accent: #1c4d78; --accent-soft: #e4ecf2;
-    --good: #3a7d44; --good-soft: #e5f0e3; --warn: #a8721c; --warn-soft: #f5ecd8;
-    --crit: #a8352c; --crit-soft: #f5e2df; --grid: rgba(20,20,15,0.05);
+    --bg: #e6eaec; --bg-panel: #f7fafb; --ink: #101619; --ink-dim: #5c666d;
+    --line: #c5ccd1; --line-strong: #101619; --accent: #1c4d78; --accent-soft: #dae5ee;
+    --good: #3a7d44; --good-soft: #e1efe3; --warn: #a8721c; --warn-soft: #f3ead6;
+    --crit: #a8352c; --crit-soft: #f4e1de; --grid: rgba(16,22,25,0.055);
   }
 
   * { box-sizing: border-box; }
@@ -340,7 +340,7 @@
   <header class="titleblock">
     <div class="tb-main">
       <div>
-        <p class="eyebrow">STAGE 04 · 可互動化儀表板</p>
+        <p class="eyebrow">建案進度 · 週報快照</p>
         <h1>建案進度監控儀表板</h1>
       </div>
       <div class="meta">
@@ -368,9 +368,7 @@
   <div class="notice error" id="errorBanner" hidden></div>
 
   <div class="notice">
-    <strong>這是靜態快照，不是即時系統。</strong>
-    畫面上的數字，是你上傳CSV那一刻的資料。重新整理頁面、或關掉分頁再打開，會回到最初的示範資料——因為這份網頁沒有連接任何資料庫，一切運算都只發生在你的瀏覽器裡。
-    適合用在週報、月報這種「某個時間點對一份快照」的場景；如果需要多人即時同步更新，就要另外接資料庫和後端服務了。
+    上傳的 CSV 只在你的瀏覽器中運算，不會傳送到任何伺服器，也不會被儲存；重新整理頁面即回到預設資料。
   </div>
 
   <div class="kpi-row" id="kpiRow"></div>
@@ -397,7 +395,7 @@
     </div>
   </section>
 
-  <footer>vibe coding 課程示範教材 · 純 HTML／JavaScript，無伺服器、無資料庫</footer>
+  <footer>建案進度監控儀表板 · 支援 CSV 匯入</footer>
 </div>
 
 <script>
