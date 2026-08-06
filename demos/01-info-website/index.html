@@ -1,215 +1,265 @@
-<title>翠湖苑 · 建案介紹</title>
+<title>沐森 MUSEN · 台中七期</title>
 <style>
+  /* 刻意只做暗場單一主題：高階建案文宣的視覺世界就是夜色，
+     做亮色版反而會稀釋掉私宅感。這是選擇，不是遺漏。 */
   :root {
-    --paper: #e2e6e5;
-    --surface: #eef1f0;
-    --surface-a: rgba(238,241,240,0.84);
-    --ink: #16201d;
-    --ink-2: #59635f;
-    --rule: #c3c9c7;
-    --brass: #8a6a3e;
-    --brass-2: #a98a5c;
+    color-scheme: dark;
+    --ink:      #070b09;
+    --ink-2:    #0c1210;
+    --surface:  #111815;
+    --surface-a: rgba(7,11,9,0.72);
+    --line:     #1c2721;
+    --line-2:   #2b3a32;
+    --text:     #e9eee9;
+    --text-2:   #8b9c92;
+    --text-3:   #5d6b64;
+    --gold:     #b49164;
+    --gold-2:   #d9be8e;
 
-    --font-display: "Noto Serif TC", "Songti TC", "Source Han Serif TC", Georgia, "Microsoft JhengHei", "PingFang TC", serif;
-    --font-body: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", -apple-system, sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: #131716;
-      --surface: #1b201f;
-      --surface-a: rgba(27,32,31,0.84);
-      --ink: #e3e8e6;
-      --ink-2: #929c99;
-      --rule: #2a3130;
-      --brass: #c2a272;
-      --brass-2: #d9be93;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #131716; --surface: #1b201f; --surface-a: rgba(27,32,31,0.84);
-    --ink: #e3e8e6; --ink-2: #929c99; --rule: #2a3130;
-    --brass: #c2a272; --brass-2: #d9be93;
-  }
-  :root[data-theme="light"] {
-    --paper: #e2e6e5; --surface: #eef1f0; --surface-a: rgba(238,241,240,0.84);
-    --ink: #16201d; --ink-2: #59635f; --rule: #c3c9c7;
-    --brass: #8a6a3e; --brass-2: #a98a5c;
+    --serif: "Noto Serif TC", "Songti TC", "Source Han Serif TC", Georgia, "Microsoft JhengHei", serif;
+    --sans:  "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", -apple-system, sans-serif;
+    --mono:  "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   }
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--font-body);
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--sans);
     font-size: 15px;
-    line-height: 1.75;
+    line-height: 1.8;
     -webkit-font-smoothing: antialiased;
   }
   a { color: inherit; }
+  ::selection { background: var(--gold); color: var(--ink); }
 
-  .shell { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+  .shell { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
 
   /* ── 頂列 ── */
   .topbar {
-    position: sticky; top: 0; z-index: 20;
+    position: sticky; top: 0; z-index: 40;
     background: var(--surface-a);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
   }
   .topbar-inner {
-    max-width: 1140px; margin: 0 auto; padding: 0 32px;
-    height: 62px; display: flex; align-items: center; justify-content: space-between;
+    max-width: 1180px; margin: 0 auto; padding: 0 40px;
+    height: 70px; display: flex; align-items: center; justify-content: space-between;
   }
-  .wordmark { font-family: var(--font-display); font-size: 19px; font-weight: 600; letter-spacing: 0.18em; }
-  .topbar nav { display: flex; gap: 30px; }
+  .mark { display: flex; align-items: baseline; gap: 12px; }
+  .mark b {
+    font-family: var(--serif); font-size: 20px; font-weight: 600;
+    letter-spacing: 0.34em; margin-right: -0.34em;
+  }
+  .mark span {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em;
+    color: var(--gold); margin-right: -0.3em;
+  }
+  .topbar nav { display: flex; gap: 34px; }
   .topbar nav a {
-    font-size: 13px; color: var(--ink-2); text-decoration: none;
-    letter-spacing: 0.06em; padding: 4px 0;
-    border-bottom: 1px solid transparent;
-    transition: color .25s, border-color .25s;
+    font-size: 13px; color: var(--text-2); text-decoration: none;
+    letter-spacing: 0.1em; padding: 3px 0; position: relative;
   }
-  .topbar nav a:hover, .topbar nav a:focus-visible { color: var(--ink); border-bottom-color: var(--brass); }
+  .topbar nav a::after {
+    content: ""; position: absolute; left: 0; right: 100%; bottom: 0;
+    height: 1px; background: var(--gold); transition: right .4s cubic-bezier(.2,.7,.3,1);
+  }
+  .topbar nav a:hover, .topbar nav a:focus-visible { color: var(--text); }
+  .topbar nav a:hover::after, .topbar nav a:focus-visible::after { right: 0; }
 
   /* ── 首屏 ── */
-  .hero { padding: 96px 0 62px; }
-  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: start; }
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 70px);
+    display: flex; align-items: center;
+    padding: 80px 0 90px;
+    overflow: hidden;
+  }
+  /* 內縮金線框：裱框感，是這頁唯一的裝飾性筆觸 */
+  .hero-frame {
+    position: absolute; inset: 34px 40px;
+    border: 1px solid rgba(180,145,100,0.22);
+    pointer-events: none; z-index: 2;
+  }
+  .hero-inner { position: relative; z-index: 3; width: 100%; }
+  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center; }
+
   .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase;
-    color: var(--brass); margin: 0 0 26px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.34em;
+    text-transform: uppercase; color: var(--gold); margin: 0 0 34px;
   }
   .hero h1 {
-    font-family: var(--font-display);
-    font-size: clamp(58px, 10vw, 108px);
-    font-weight: 600; margin: 0;
-    letter-spacing: 0.1em; line-height: 1;
+    font-family: var(--serif);
+    font-size: clamp(72px, 13vw, 158px);
+    font-weight: 500; margin: 0;
+    letter-spacing: 0.16em; line-height: 0.98;
+    margin-right: -0.16em;
+  }
+  .latin {
+    font-family: var(--mono); font-size: clamp(11px, 1.4vw, 14px);
+    letter-spacing: 0.62em; color: var(--text-3);
+    margin: 26px 0 0; margin-right: -0.62em;
   }
   .hero .tagline {
-    font-family: var(--font-display);
-    font-size: clamp(19px, 2.4vw, 24px);
-    margin: 26px 0 0; letter-spacing: 0.14em; color: var(--ink-2);
+    font-family: var(--serif); font-size: clamp(20px, 2.6vw, 28px);
+    margin: 46px 0 0; letter-spacing: 0.16em; color: var(--text);
+    font-weight: 400;
   }
   .hero .lead {
-    margin: 34px 0 0; font-size: 15.5px; line-height: 2;
-    max-width: 30em; color: var(--ink-2);
+    margin: 26px 0 0; font-size: 15px; line-height: 2.1;
+    max-width: 27em; color: var(--text-2); letter-spacing: 0.04em;
   }
   /* 直排標語：逐字堆疊，不依賴 writing-mode 的字距行為 */
   .vtag {
-    display: inline-flex; flex-direction: column; align-items: center; gap: 12px;
-    font-family: var(--font-display); font-size: 17px; line-height: 1;
-    color: var(--ink); padding: 22px 14px; border-left: 1px solid var(--brass);
+    display: inline-flex; flex-direction: column; align-items: center; gap: 15px;
+    font-family: var(--serif); font-size: 16px; line-height: 1;
+    color: var(--gold-2); padding: 26px 16px;
+    border-left: 1px solid rgba(180,145,100,0.34);
   }
-  .vtag i { display: block; height: 16px; }
+  .vtag i { display: block; height: 20px; }
 
-  .hero-meta {
-    margin-top: 62px; padding-top: 22px; border-top: 1px solid var(--ink);
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  .scroll-cue {
+    position: absolute; left: 50%; bottom: 46px; transform: translateX(-50%);
+    z-index: 3; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.28em; color: var(--text-3);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
   }
-  .hero-meta dt {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--ink-2); margin-bottom: 7px;
-  }
-  .hero-meta dd {
-    margin: 0; font-family: var(--font-display);
-    font-size: 18px; letter-spacing: 0.05em;
+  .scroll-cue::after {
+    content: ""; width: 1px; height: 46px;
+    background: linear-gradient(var(--gold), transparent);
   }
 
-  /* ── 區塊節奏 ── */
-  .band { padding: 92px 0; border-top: 1px solid var(--rule); }
+  /* ── 區塊 ── */
+  .band { padding: 130px 0; border-top: 1px solid var(--line); }
   .label {
-    font-family: var(--font-mono);
-    font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--brass); margin: 0 0 4px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold); margin: 0 0 10px;
   }
   .band h2 {
-    font-family: var(--font-display);
-    font-size: 27px; font-weight: 600; letter-spacing: 0.08em; margin: 0 0 34px;
+    font-family: var(--serif); font-size: clamp(26px, 3vw, 34px);
+    font-weight: 500; letter-spacing: 0.12em; margin: 0 0 56px;
+  }
+
+  /* ── 五分鐘：主打賣點自己一個版面 ── */
+  .distance { padding: 120px 0; border-top: 1px solid var(--line); background: var(--ink-2); }
+  .dist-top { display: grid; grid-template-columns: auto 1fr; gap: 56px; align-items: end; }
+  .numeral {
+    display: flex; align-items: baseline; gap: 16px;
+    font-family: var(--serif); color: var(--gold-2);
+    line-height: 0.8;
+  }
+  .numeral b { font-size: clamp(120px, 20vw, 240px); font-weight: 400; letter-spacing: -0.02em; }
+  .numeral em {
+    font-style: normal; font-size: clamp(20px, 2.4vw, 30px);
+    letter-spacing: 0.2em; color: var(--text);
+  }
+  .dist-say { padding-bottom: 22px; }
+  .dist-say .to {
+    font-family: var(--serif); font-size: clamp(21px, 2.6vw, 30px);
+    letter-spacing: 0.14em; margin: 0 0 12px;
+  }
+  .dist-say p { margin: 0; color: var(--text-2); font-size: 14.5px; letter-spacing: 0.04em; max-width: 30em; }
+
+  .index { list-style: none; margin: 66px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 72px; }
+  .index li {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 19px 0; border-bottom: 1px solid var(--line);
+  }
+  .index .n { font-size: 14.5px; letter-spacing: 0.06em; white-space: nowrap; }
+  .index .dots { flex: 1; border-bottom: 1px dotted var(--line-2); transform: translateY(-5px); }
+  .index .v {
+    font-family: var(--mono); font-size: 12px; color: var(--gold);
+    letter-spacing: 0.08em; white-space: nowrap; font-variant-numeric: tabular-nums;
   }
 
   /* ── 理念 ── */
-  .concept-grid { display: grid; grid-template-columns: 190px 1fr; gap: 48px; align-items: start; }
-  .concept-side .rule { width: 46px; height: 1px; background: var(--brass); margin-top: 14px; }
-  .concept-body p {
-    font-family: var(--font-display);
-    font-size: 20px; line-height: 2; margin: 0 0 22px;
-    letter-spacing: 0.03em; max-width: 34em;
+  .concept-grid { display: grid; grid-template-columns: 200px 1fr; gap: 60px; align-items: start; }
+  .concept-side .rule { width: 52px; height: 1px; background: var(--gold); margin-top: 18px; }
+  .quote {
+    font-family: var(--serif); font-size: clamp(23px, 2.9vw, 32px);
+    line-height: 2; margin: 0 0 40px; letter-spacing: 0.1em;
+    max-width: 22em; font-weight: 400;
   }
-  .concept-body p:last-child {
-    font-family: var(--font-body);
-    font-size: 14.5px; line-height: 1.95; color: var(--ink-2); letter-spacing: 0.02em;
+  .concept-body p.body {
+    font-size: 15px; line-height: 2.2; color: var(--text-2);
+    letter-spacing: 0.04em; margin: 0 0 20px; max-width: 40em;
   }
 
-  /* ── 特色 ── */
-  .marks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-  .mark .hair { width: 34px; height: 1px; background: var(--brass); margin-bottom: 20px; }
-  .mark h3 { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: 0.06em; margin: 0 0 10px; }
-  .mark p { margin: 0; font-size: 13.5px; color: var(--ink-2); line-height: 1.9; }
+  /* ── 規劃特色 ── */
+  .marks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 54px; }
+  .mark-no {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .marks h3 {
+    font-family: var(--serif); font-size: 19px; font-weight: 500;
+    letter-spacing: 0.12em; margin: 0 0 14px;
+  }
+  .marks p { margin: 0; font-size: 13.5px; color: var(--text-2); line-height: 2.05; letter-spacing: 0.03em; }
 
-  /* ── 格局表 ── */
+  /* ── 格局 ── */
   .schedule { width: 100%; border-collapse: collapse; }
-  .schedule caption { text-align: left; font-size: 12.5px; color: var(--ink-2); padding-bottom: 14px; letter-spacing: 0.02em; }
+  .schedule caption {
+    text-align: left; font-size: 13px; color: var(--text-2);
+    padding-bottom: 22px; letter-spacing: 0.05em;
+  }
   .schedule th {
-    text-align: left; font-family: var(--font-mono);
-    font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--ink-2); font-weight: 500;
-    border-bottom: 1px solid var(--ink); padding: 0 14px 11px 0;
+    text-align: left; font-family: var(--mono);
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--text-3); font-weight: 400;
+    border-bottom: 1px solid var(--line-2); padding: 0 18px 14px 0;
   }
   .schedule th:last-child, .schedule td:last-child { text-align: right; padding-right: 0; }
-  .schedule td { padding: 18px 14px 18px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
+  .schedule td { padding: 24px 18px 24px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; letter-spacing: 0.04em; }
   .schedule tbody tr:last-child td { border-bottom: none; }
-  .schedule .unit { font-family: var(--font-display); letter-spacing: 0.04em; }
-  .schedule .fig { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 13.5px; }
-
-  /* ── 生活機能：索引式點線 ── */
-  .access-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; }
-  .access-list li { display: flex; align-items: baseline; gap: 12px; padding: 15px 0; border-bottom: 1px solid var(--rule); }
-  .access-list .name { font-size: 14.5px; white-space: nowrap; }
-  .access-list .lead { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-5px); margin: 0; }
-  .access-list .dist { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .schedule .unit { font-family: var(--serif); letter-spacing: 0.1em; font-size: 16px; }
+  .schedule .fig { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; color: var(--gold); }
 
   /* ── 頁尾 ── */
-  .foot { border-top: 1px solid var(--rule); padding: 62px 0 74px; }
-  .foot-grid { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: end; }
-  .foot .wordmark { display: block; margin-bottom: 16px; }
-  .foot p { margin: 0 0 6px; font-size: 13.5px; color: var(--ink-2); letter-spacing: 0.02em; }
+  .foot { border-top: 1px solid var(--line); padding: 96px 0 76px; }
+  .foot-grid { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: end; }
+  .foot .mark { margin-bottom: 26px; }
+  .foot p { margin: 0 0 9px; font-size: 13.5px; color: var(--text-2); letter-spacing: 0.05em; }
   .cta {
-    display: inline-block; text-decoration: none;
-    border: 1px solid var(--brass); color: var(--brass);
-    padding: 13px 34px; font-size: 13px; letter-spacing: 0.14em;
-    transition: background .3s, color .3s;
+    display: inline-flex; align-items: center; gap: 14px; text-decoration: none;
+    border: 1px solid var(--gold); color: var(--gold-2);
+    padding: 17px 42px; font-size: 13px; letter-spacing: 0.24em;
+    transition: background .45s cubic-bezier(.2,.7,.3,1), color .45s;
   }
-  .cta:hover, .cta:focus-visible { background: var(--brass); color: var(--surface); }
-  .disclaimer {
-    margin-top: 42px; padding-top: 20px; border-top: 1px solid var(--rule);
-    font-size: 11.5px; color: var(--ink-2); letter-spacing: 0.02em;
+  .cta::after { content: "→"; font-family: var(--mono); }
+  .cta:hover, .cta:focus-visible { background: var(--gold); color: var(--ink); }
+  .fine {
+    margin-top: 62px; padding-top: 26px; border-top: 1px solid var(--line);
+    font-size: 11.5px; color: var(--text-3); letter-spacing: 0.05em; line-height: 2;
   }
 
-  :focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+  :focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
 
-  .reveal { opacity: 0; transform: translateY(16px); }
+  /* ── 動態：克制的進場序列 ── */
+  .rise { opacity: 0; transform: translateY(22px); }
   @media (prefers-reduced-motion: no-preference) {
-    .reveal { transition: opacity .8s ease, transform .8s ease; }
+    .rise { transition: opacity 1.1s cubic-bezier(.2,.7,.3,1), transform 1.1s cubic-bezier(.2,.7,.3,1); }
   }
-  .reveal.in { opacity: 1; transform: none; }
+  .rise.in { opacity: 1; transform: none; }
 
-  @media (max-width: 900px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 30px; }
-    .vtag { flex-direction: row; border-left: none; border-top: 1px solid var(--brass); padding: 14px 0 0; }
-    .vtag i { height: auto; width: 16px; }
-    .hero-meta { grid-template-columns: 1fr 1fr; gap: 22px; }
-    .concept-grid { grid-template-columns: 1fr; gap: 22px; }
-    .marks { grid-template-columns: 1fr; gap: 34px; }
-    .access-list { grid-template-columns: 1fr; }
-    .topbar nav { gap: 18px; }
+  @media (max-width: 940px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .vtag { flex-direction: row; border-left: none; border-top: 1px solid rgba(180,145,100,0.34); padding: 18px 0 0; }
+    .vtag i { height: auto; width: 20px; }
+    .dist-top { grid-template-columns: 1fr; gap: 26px; align-items: start; }
+    .dist-say { padding-bottom: 0; }
+    .index { grid-template-columns: 1fr; gap: 0; }
+    .concept-grid { grid-template-columns: 1fr; gap: 26px; }
+    .marks { grid-template-columns: 1fr; gap: 44px; }
+    .topbar nav { gap: 20px; }
+    .scroll-cue { display: none; }
   }
   @media (max-width: 620px) {
-    .shell, .topbar-inner { padding-left: 20px; padding-right: 20px; }
-    .hero { padding: 56px 0 40px; }
-    .band { padding: 62px 0; }
+    .shell, .topbar-inner { padding-left: 24px; padding-right: 24px; }
+    .hero-frame { inset: 20px 24px; }
+    .band, .distance { padding: 82px 0; }
     .topbar nav a:nth-child(n+3) { display: none; }
     .foot-grid { grid-template-columns: 1fr; align-items: start; }
   }
@@ -217,41 +267,62 @@
 
 <header class="topbar">
   <div class="topbar-inner">
-    <span class="wordmark">翠湖苑</span>
+    <span class="mark"><b>沐森</b><span>MUSEN</span></span>
     <nav>
-      <a href="#concept">建案理念</a>
+      <a href="#distance">生活尺度</a>
+      <a href="#concept">建築理念</a>
+      <a href="#design">規劃特色</a>
       <a href="#plans">格局配置</a>
-      <a href="#access">生活機能</a>
-      <a href="#contact">聯絡我們</a>
     </nav>
   </div>
 </header>
 
 <section class="hero">
-  <div class="shell">
-    <div class="hero-grid">
-      <div>
-        <p class="eyebrow">台中 · 七期重劃區</p>
-        <h1>翠湖苑</h1>
-        <p class="tagline">依山面湖，日光入室</p>
-        <p class="lead">一棟面湖而立的低層電梯宅。從基地座向到公共空間，以居住的尺度重新丈量。</p>
-      </div>
-      <div class="vtag" aria-label="風景先進來">
-        <span>建</span><span>築</span><span>退</span><span>後</span>
-        <i></i>
-        <span>風</span><span>景</span><span>先</span><span>進</span><span>來</span>
+  <div class="hero-frame"></div>
+  <div class="hero-inner">
+    <div class="shell">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow rise">台中 · 七期經貿園區</p>
+          <h1 class="rise">沐森</h1>
+          <p class="latin rise">MUSEN RESIDENCE</p>
+          <p class="tagline rise">在城市的中心，養一片森林</p>
+          <p class="lead rise">步行五分鐘抵達台中市政府站。基地退縮十二公尺，讓出一整座森林中庭，作為每日返家的前景。</p>
+        </div>
+        <div class="vtag rise" aria-label="退開一步，方得從容">
+          <span>退</span><span>開</span><span>一</span><span>步</span>
+          <i></i>
+          <span>方</span><span>得</span><span>從</span><span>容</span>
+        </div>
       </div>
     </div>
-    <dl class="hero-meta">
-      <div><dt>基地位置</dt><dd>台中市西屯區</dd></div>
-      <div><dt>規模</dt><dd>地上 7 層</dd></div>
-      <div><dt>總戶數</dt><dd>180 戶</dd></div>
-      <div><dt>公設比</dt><dd>28%</dd></div>
-    </dl>
   </div>
+  <div class="scroll-cue">SCROLL</div>
 </section>
 
 <main>
+  <!-- 主打賣點：自己一個版面 -->
+  <section class="distance" id="distance">
+    <div class="shell">
+      <p class="label">Distance</p>
+      <div class="dist-top">
+        <div class="numeral"><b>5</b><em>分鐘</em></div>
+        <div class="dist-say">
+          <p class="to">步行抵達 台中市政府站</p>
+          <p>捷運綠線市政府站 1 號出口，沿市政北二路直行。不必開車、不必轉乘，把通勤還原成一段散步。</p>
+        </div>
+      </div>
+      <ul class="index">
+        <li><span class="n">捷運市政府站</span><span class="dots"></span><span class="v">步行 5 分</span></li>
+        <li><span class="n">市政公園</span><span class="dots"></span><span class="v">步行 3 分</span></li>
+        <li><span class="n">新光三越 · 大遠百</span><span class="dots"></span><span class="v">步行 6 分</span></li>
+        <li><span class="n">台灣大道</span><span class="dots"></span><span class="v">車程 3 分</span></li>
+        <li><span class="n">國家歌劇院</span><span class="dots"></span><span class="v">車程 8 分</span></li>
+        <li><span class="n">台中榮總</span><span class="dots"></span><span class="v">車程 12 分</span></li>
+      </ul>
+    </div>
+  </section>
+
   <section class="band" id="concept">
     <div class="shell">
       <div class="concept-grid">
@@ -260,32 +331,33 @@
           <div class="rule"></div>
         </div>
         <div class="concept-body">
-          <p>把湖光留在客廳，把山線留在陽台。<br />建築退後，讓風景先進來。</p>
-          <p>基地南側正對翠湖，我們把主要開窗面全數轉向水岸，並將棟距拉開至 32 公尺，確保每一戶都能保有完整的湖面視野。低層規劃讓建築量體伏貼於環湖綠帶的天際線，不與環境爭高。</p>
+          <p class="quote">城市給了效率，<br />森林把尺度還給你。</p>
+          <p class="body">七期是台中密度最高的一塊土地。我們沒有把它用滿——基地自街廓退縮十二公尺，讓出二百四十坪的森林中庭，種入九十六株喬木。從市政北二路轉進來，會先走過一段樹蔭，才抵達門廳。</p>
+          <p class="body">建築量體壓低至地上十四層，一層一戶。所有主要開窗面朝向中庭，把街道的聲音與視線留在外面。捷運五分鐘的方便留著，都市的紛擾請止步於此。</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="band">
+  <section class="band" id="design">
     <div class="shell">
-      <p class="label">Features</p>
-      <h2>建案特色</h2>
+      <p class="label">Design</p>
+      <h2>規劃特色</h2>
       <div class="marks">
-        <div class="mark">
-          <div class="hair"></div>
-          <h3>基地座向</h3>
-          <p>南向面湖，北側退縮設置停車動線，主要生活空間全數避開西曬，夏季室溫可有效降低。</p>
+        <div>
+          <div class="mark-no">01</div>
+          <h3>森林中庭</h3>
+          <p>二百四十坪基地退縮，九十六株喬木構成三層次林相。地面層不設圍牆，以植栽與高差界定領域。</p>
         </div>
-        <div class="mark">
-          <div class="hair"></div>
-          <h3>建材規格</h3>
-          <p>外牆採清水模一次性澆置，對外窗使用低輻射複層玻璃，隔音與隔熱同步處理。</p>
+        <div>
+          <div class="mark-no">02</div>
+          <h3>一層一戶</h3>
+          <p>電梯直達私人玄關，無公共走廊。雙層隔音牆體與氣密窗，將室內背景音量控制於 35 分貝以下。</p>
         </div>
-        <div class="mark">
-          <div class="hair"></div>
-          <h3>公共空間</h3>
-          <p>一樓大廳挑高六米並向湖面開放，屋頂設置空中花園與健身房，公設比控制於 28%。</p>
+        <div>
+          <div class="mark-no">03</div>
+          <h3>全齡機能</h3>
+          <p>會館設交誼廳、健身房與長者友善的復健水療區。地下二層規劃一戶兩車位與獨立儲藏空間。</p>
         </div>
       </div>
     </div>
@@ -293,35 +365,20 @@
 
   <section class="band" id="plans">
     <div class="shell">
-      <p class="label">Floor Plans</p>
+      <p class="label">Residences</p>
       <h2>格局配置</h2>
       <table class="schedule">
-        <caption>全案共 180 戶，分 A、B 兩棟，各戶皆配置獨立陽台。</caption>
+        <caption>全案 44 戶，地上十四層、地下三層，一層一戶。</caption>
         <thead>
           <tr><th>戶型</th><th>格局</th><th>坪數</th><th>戶數</th></tr>
         </thead>
         <tbody>
-          <tr><td class="unit">A 棟 · 標準二房</td><td>2 房 2 廳 1 衛</td><td class="fig">28.4 坪</td><td class="fig">40</td></tr>
-          <tr><td class="unit">A 棟 · 標準三房</td><td>3 房 2 廳 2 衛</td><td class="fig">38.2 坪</td><td class="fig">60</td></tr>
-          <tr><td class="unit">B 棟 · 面湖三房</td><td>3+1 房 2 廳 2 衛</td><td class="fig">45.6 坪</td><td class="fig">50</td></tr>
-          <tr><td class="unit">B 棟 · 頂層四房</td><td>4 房 2 廳 3 衛</td><td class="fig">62.0 坪</td><td class="fig">30</td></tr>
+          <tr><td class="unit">標準層 · 四房</td><td>4 房 2 廳 3 衛</td><td class="fig">68.4 坪</td><td class="fig">18</td></tr>
+          <tr><td class="unit">景觀層 · 四房</td><td>4 房 2 廳 4 衛</td><td class="fig">82.6 坪</td><td class="fig">16</td></tr>
+          <tr><td class="unit">樓中樓</td><td>5 房 3 廳 4 衛</td><td class="fig">118.0 坪</td><td class="fig">8</td></tr>
+          <tr><td class="unit">頂層一戶</td><td>5 房 3 廳 5 衛 · 私人露臺</td><td class="fig">156.2 坪</td><td class="fig">2</td></tr>
         </tbody>
       </table>
-    </div>
-  </section>
-
-  <section class="band" id="access">
-    <div class="shell">
-      <p class="label">Neighborhood</p>
-      <h2>生活機能</h2>
-      <ul class="access-list">
-        <li><span class="name">翠湖公園</span><span class="lead"></span><span class="dist">步行 3 分</span></li>
-        <li><span class="name">捷運翠湖站</span><span class="lead"></span><span class="dist">步行 5 分</span></li>
-        <li><span class="name">翠湖傳統市場</span><span class="lead"></span><span class="dist">步行 6 分</span></li>
-        <li><span class="name">翠湖國小</span><span class="lead"></span><span class="dist">步行 8 分</span></li>
-        <li><span class="name">國泰綜合醫院</span><span class="lead"></span><span class="dist">車程 10 分</span></li>
-        <li><span class="name">翠湖高中</span><span class="lead"></span><span class="dist">車程 12 分</span></li>
-      </ul>
     </div>
   </section>
 </main>
@@ -330,28 +387,39 @@
   <div class="shell">
     <div class="foot-grid">
       <div>
-        <span class="wordmark">翠湖苑</span>
-        <p>接待中心｜台中市西屯區翠湖路 88 號</p>
-        <p>賞屋時間｜每日 10:00 – 18:00</p>
+        <span class="mark"><b>沐森</b><span>MUSEN</span></span>
+        <p>接待會館｜台中市西屯區市政北二路 168 號</p>
+        <p>預約制賞屋｜每日 11:00 – 19:00</p>
       </div>
-      <a class="cta" href="#">預約賞屋</a>
+      <a class="cta" href="#">預約專人導覽</a>
     </div>
-    <p class="disclaimer">本頁建案名稱、地址與聯絡資訊均為虛構，非真實銷售資訊。</p>
+    <p class="fine">本頁建案名稱、地址、規格與聯絡資訊均為虛構，非真實銷售資訊。距離與時間為示意值。</p>
   </div>
 </footer>
 
 <script>
-  var targets = document.querySelectorAll('.hero .shell > *, .band .shell > *, .foot-grid, .disclaimer');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var heroBits = document.querySelectorAll('.hero .rise');
+  var rest = document.querySelectorAll('.band .shell > *, .distance .shell > *, .foot-grid, .fine');
+
   if (reduce || !('IntersectionObserver' in window)) {
-    targets.forEach(function (el) { el.classList.add('in'); });
+    heroBits.forEach(function (el) { el.classList.add('in'); });
+    rest.forEach(function (el) { el.classList.add('in'); });
   } else {
-    targets.forEach(function (el) { el.classList.add('reveal'); });
+    /* 首屏：載入後依序浮現 */
+    heroBits.forEach(function (el, i) {
+      el.style.transitionDelay = (0.12 + i * 0.13).toFixed(2) + 's';
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { el.classList.add('in'); });
+      });
+    });
+    /* 其餘：捲到才浮現 */
+    rest.forEach(function (el) { el.classList.add('rise'); });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
       });
-    }, { rootMargin: '0px 0px -12% 0px' });
-    targets.forEach(function (el) { io.observe(el); });
+    }, { rootMargin: '0px 0px -14% 0px' });
+    rest.forEach(function (el) { io.observe(el); });
   }
 </script>

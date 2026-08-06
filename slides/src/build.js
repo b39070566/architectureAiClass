@@ -96,7 +96,7 @@ function light(code, accent) {
   s.addShape(pres.ShapeType.line, {
     x: M, y: 5.2, w: 3.2, h: 0, line: { color: BRASS, width: 1.5 },
   });
-  s.addText("全程以「翠湖苑」建案為例，四個階段逐步累積", {
+  s.addText("全程以「沐森」建案為例，四個階段逐步累積", {
     x: M, y: 5.45, w: 9, h: 0.4, fontFace: FS, fontSize: 13,
     color: MUTED, margin: 0,
   });
@@ -257,8 +257,8 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
     bold: true, color: INK, margin: 0, valign: "top",
   });
   s.addText([
-    { text: "一整份建案介紹網頁：建案名、理念、特色、", options: { breakLine: true } },
-    { text: "格局表、生活機能、聯絡方式。", options: { breakLine: true } },
+    { text: "一整份建案介紹網頁：建案名、生活尺度、", options: { breakLine: true } },
+    { text: "理念、規劃特色、格局表、聯絡方式。", options: { breakLine: true } },
     { text: "" , options: { breakLine: true } },
     { text: "從頭到尾沒有寫一行程式碼。" , options: { bold: true } },
   ], {
@@ -274,7 +274,7 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
   eyebrow(s, "核心觀念", BRASS);
   title(s, "你不是在寫程式，是在描述需求");
   card(s, M, 2.15, W, 1.5, { fill: "FFFFFF" });
-  s.addText("「幫我做一個建案介紹網頁，建案叫翠湖苑，在台中七期，主打面湖景觀，要有格局表和生活機能。」", {
+  s.addText("「幫我做一個建案介紹網頁，建案叫沐森，在台中七期，主打面湖景觀，要有格局表和生活機能。」", {
     x: M + 0.5, y: 2.15, w: W - 1.0, h: 1.5, fontFace: FS, fontSize: 19,
     color: INK, margin: 0, valign: "middle", lineSpacing: 32,
   });
@@ -333,7 +333,7 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
     x: x2 + 0.4, y: 2.42, w: cw - 0.8, h: 0.36, fontFace: FS, fontSize: 15,
     bold: true, color: GOOD, margin: 0,
   });
-  s.addText("「翠湖苑，台中七期，低層電梯宅，主打面湖景觀。要有建案理念、格局表、生活機能、聯絡方式。調性沉靜有質感，不要像廣告傳單。」", {
+  s.addText("「沐森，台中七期，低層電梯宅，主打面湖景觀。要有建案理念、格局表、生活機能、聯絡方式。調性沉靜有質感，不要像廣告傳單。」", {
     x: x2 + 0.4, y: 2.9, w: cw - 0.8, h: 2.1, fontFace: FS, fontSize: 15,
     color: INK, margin: 0, valign: "top", lineSpacing: 25,
   });
@@ -351,7 +351,7 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
   title(s, "一個好指令，講滿這四件事");
   const four = [
     ["01", "做什麼", "一頁建案介紹網站"],
-    ["02", "關於誰", "翠湖苑，台中七期，低層電梯宅"],
+    ["02", "關於誰", "沐森，台中七期，低層電梯宅"],
     ["03", "要有什麼", "理念、特色、格局表、生活機能、聯絡"],
     ["04", "什麼調性", "沉靜有質感，不要像廣告傳單"],
   ];
@@ -467,7 +467,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
   });
   s.addText([
     { text: "文字、版面完全沒動。", options: { breakLine: true } },
-    { text: "只是把資料夾裡的圖片檔換掉。", options: { breakLine: true } },
+    { text: "只是多了資料夾裡的圖片檔。", options: { breakLine: true } },
     { text: "", options: { breakLine: true } },
     { text: "從這一刻起，它不再是範例，", options: { breakLine: true } },
     { text: "而是你的東西。", options: { bold: true } },
@@ -522,7 +522,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
   title(s, "資料夾長什麼樣");
   card(s, M, 2.15, 6.6, 3.5, { fill: "FFFFFF" });
   s.addText([
-    { text: "翠湖苑網站/", options: { breakLine: true, bold: true, color: INK } },
+    { text: "沐森網站/", options: { breakLine: true, bold: true, color: INK } },
     { text: "├─ index.html          ", options: { color: MUTED } },
     { text: "網頁", options: { breakLine: true, color: BRASS } },
     { text: "└─ images/             ", options: { color: MUTED } },
