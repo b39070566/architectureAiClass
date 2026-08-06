@@ -1,0 +1,546 @@
+<title>漸進式四階段架構 · 課程示例</title>
+<style>
+  @font-face {
+    font-family: 'JetBrains Mono';
+    src: local('JetBrains Mono'), local('Consolas'), local('Menlo');
+  }
+
+  :root {
+    --bg: #f2f1ec;
+    --bg-panel: #ffffff;
+    --ink: #14140f;
+    --ink-dim: #6f6c60;
+    --line: #d6d2c4;
+    --line-strong: #14140f;
+    --accent: #1c4d78;
+    --accent-soft: #e4ecf2;
+    --grid: rgba(20,20,15,0.05);
+    /* 四階段的漸進色階：從淡到滿，編碼「累積難度」 */
+    --s1: #a9c2d6;
+    --s2: #6f9bbd;
+    --s3: #3c74a0;
+    --s4: #1c4d78;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #131311;
+      --bg-panel: #1b1b17;
+      --ink: #ece9de;
+      --ink-dim: #9d9a8c;
+      --line: #35342b;
+      --line-strong: #ece9de;
+      --accent: #6fa8d8;
+      --accent-soft: #1f2c37;
+      --grid: rgba(236,233,222,0.05);
+      --s1: #37536a;
+      --s2: #3f6c8c;
+      --s3: #5089b3;
+      --s4: #6fa8d8;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #131311; --bg-panel: #1b1b17; --ink: #ece9de; --ink-dim: #9d9a8c;
+    --line: #35342b; --line-strong: #ece9de; --accent: #6fa8d8; --accent-soft: #1f2c37;
+    --grid: rgba(236,233,222,0.05);
+    --s1: #37536a; --s2: #3f6c8c; --s3: #5089b3; --s4: #6fa8d8;
+  }
+  :root[data-theme="light"] {
+    --bg: #f2f1ec; --bg-panel: #ffffff; --ink: #14140f; --ink-dim: #6f6c60;
+    --line: #d6d2c4; --line-strong: #14140f; --accent: #1c4d78; --accent-soft: #e4ecf2;
+    --grid: rgba(20,20,15,0.05);
+    --s1: #a9c2d6; --s2: #6f9bbd; --s3: #3c74a0; --s4: #1c4d78;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+      var(--bg);
+    background-size: 32px 32px, 32px 32px, auto;
+    color: var(--ink);
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 24px 90px; }
+
+  /* ── 標題框 ── */
+  header.titleblock {
+    border: 1.5px solid var(--line-strong);
+    background: var(--bg-panel);
+    margin-bottom: 32px;
+  }
+  .tb-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 22px 24px 18px;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 8px;
+  }
+  .eyebrow::before { content: "⌗ "; }
+  h1 {
+    margin: 0;
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .tb-meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--ink-dim);
+    text-align: right;
+  }
+  .tb-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line-strong);
+  }
+  .tb-strip div {
+    padding: 9px 24px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+    border-left: 1px solid var(--line);
+  }
+  .tb-strip div:first-child { border-left: none; }
+  .tb-strip strong { color: var(--ink); font-weight: 700; }
+
+  /* ── 難度軸 ── */
+  .axis {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 36px;
+    padding: 0 4px;
+  }
+  .axis .axis-label {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+  .axis-track {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+    height: 6px;
+  }
+  .axis-track span { display: block; }
+  .axis-track span:nth-child(1) { background: var(--s1); }
+  .axis-track span:nth-child(2) { background: var(--s2); }
+  .axis-track span:nth-child(3) { background: var(--s3); }
+  .axis-track span:nth-child(4) { background: var(--s4); }
+
+  /* ── 四階段 ── */
+  .stages {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stage {
+    background: var(--bg-panel);
+    border: 1px solid var(--line-strong);
+    display: flex;
+    flex-direction: column;
+  }
+  .stage-head {
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .stage-no {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .stage-no::before {
+    content: "";
+    width: 9px; height: 9px;
+  }
+  .stage:nth-child(1) .stage-no::before { background: var(--s1); }
+  .stage:nth-child(2) .stage-no::before { background: var(--s2); }
+  .stage:nth-child(3) .stage-no::before { background: var(--s3); }
+  .stage:nth-child(4) .stage-no::before { background: var(--s4); }
+  .stage h3 {
+    margin: 0 0 4px;
+    font-size: 15.5px;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+  .stage .skill {
+    font-size: 12px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+  }
+
+  /* ── 瀏覽器 mockup ── */
+  .mock-browser {
+    margin: 14px 16px 0;
+    border: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .mock-chrome {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-panel);
+  }
+  .mock-chrome i {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--line);
+    display: block;
+  }
+  .mock-chrome .url {
+    margin-left: 6px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 9px;
+    color: var(--ink-dim);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    padding: 2px 6px;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .mock-scene { height: 148px; position: relative; overflow: hidden; }
+
+  /* stage 1: 資訊網站 */
+  .scene-1 { display: flex; flex-direction: column; }
+  .scene-1 .hero { height: 66px; background: linear-gradient(135deg, #cbd8e2, #9fb7c9); position: relative; }
+  .scene-1 .hero-title { position: absolute; left: 10px; bottom: 8px; color: #fff; font-size: 11px; font-weight: 700; }
+  .scene-1 .body { padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; }
+  .scene-1 .ln { height: 5px; background: var(--line); width: 100%; }
+  .scene-1 .ln.short { width: 60%; }
+
+  /* stage 2: 換圖片 */
+  .scene-2 { display: flex; flex-direction: column; }
+  .scene-2 .hero { height: 66px; background: linear-gradient(135deg, #d9c9a8, #b98f5a); position: relative; }
+  .scene-2 .hero-title { position: absolute; left: 10px; bottom: 8px; color: #fff; font-size: 11px; font-weight: 700; }
+  .scene-2 .body { padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; }
+  .scene-2 .ln { height: 5px; background: var(--line); width: 100%; }
+  .scene-2 .ln.short { width: 60%; }
+  .scene-2 .swap-badge {
+    position: absolute; top: 6px; right: 6px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 8px; color: #fff; background: rgba(20,20,15,0.55);
+    padding: 2px 5px; letter-spacing: 0.03em;
+  }
+
+  /* stage 3: 靜態儀表板 */
+  .scene-3 { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+  .scene-3 .kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; }
+  .scene-3 .kpi { background: var(--bg-panel); border: 1px solid var(--line); padding: 5px 6px; }
+  .scene-3 .kpi .v { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-weight: 700; }
+  .scene-3 .kpi .l { font-size: 7px; color: var(--ink-dim); text-transform: uppercase; }
+  .scene-3 .rows { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
+  .scene-3 .row { display: flex; align-items: center; gap: 5px; }
+  .scene-3 .row .name { width: 34px; height: 5px; background: var(--line); flex-shrink: 0; }
+  .scene-3 .row .track { flex: 1; height: 5px; background: var(--line); position: relative; }
+  .scene-3 .row .fill { position: absolute; inset: 0; background: var(--s3); }
+
+  /* stage 4: 互動儀表板 */
+  .scene-4 { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+  .scene-4 .upload {
+    display: flex; align-items: center; gap: 5px;
+    border: 1px dashed var(--s4);
+    padding: 4px 6px;
+    background: var(--accent-soft);
+  }
+  .scene-4 .upload .dot { width: 5px; height: 5px; background: var(--s4); }
+  .scene-4 .upload span {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 7.5px; color: var(--s4); font-weight: 700;
+  }
+  .scene-4 .kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; }
+  .scene-4 .kpi { background: var(--bg-panel); border: 1px solid var(--line); padding: 5px 6px; }
+  .scene-4 .kpi .v { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-weight: 700; color: var(--s4); }
+  .scene-4 .kpi .l { font-size: 7px; color: var(--ink-dim); text-transform: uppercase; }
+  .scene-4 .rows { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
+  .scene-4 .row { display: flex; align-items: center; gap: 5px; }
+  .scene-4 .row .name { width: 34px; height: 5px; background: var(--line); flex-shrink: 0; }
+  .scene-4 .row .track { flex: 1; height: 5px; background: var(--line); position: relative; }
+  .scene-4 .row .fill { position: absolute; inset: 0; background: var(--s4); }
+
+  .stage-foot {
+    padding: 10px 16px 14px;
+    margin-top: auto;
+    font-size: 11.5px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+  }
+  .stage-foot strong { color: var(--ink); }
+
+  /* 連接箭頭（僅桌面寬螢幕顯示，強調「這是流程」） */
+  .arrow {
+    display: none;
+  }
+
+  /* ── 底部對照表 ── */
+  section.panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--line-strong);
+    margin-bottom: 24px;
+  }
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .panel-head h2 { font-size: 14px; margin: 0; font-weight: 700; }
+  .panel-head h2 .sheet-no {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    color: var(--accent); font-weight: 700; margin-right: 8px;
+  }
+  .panel-head .hint {
+    font-size: 11.5px; color: var(--ink-dim);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  .table-scroll { overflow-x: auto; padding: 0 20px 18px; }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  thead th {
+    text-align: left; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ink-dim);
+    border-bottom: 1px solid var(--line-strong);
+    padding: 10px 10px 8px; font-weight: 700;
+  }
+  tbody td {
+    padding: 10px 10px; border-bottom: 1px solid var(--line);
+    font-size: 13px; vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.tag {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px; font-weight: 700; white-space: nowrap;
+  }
+  tr:nth-child(1) td.tag { color: var(--s1); }
+  tr:nth-child(2) td.tag { color: var(--s2); }
+  tr:nth-child(3) td.tag { color: var(--s3); }
+  tr:nth-child(4) td.tag { color: var(--s4); }
+
+  .notice {
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    margin-bottom: 28px;
+    line-height: 1.65;
+  }
+  .notice strong { color: var(--ink); }
+
+  footer {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink-dim);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    margin-top: 40px;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 860px) {
+    .stages { grid-template-columns: 1fr 1fr; }
+    .tb-strip { grid-template-columns: 1fr; }
+    .tb-strip div { border-left: none; border-top: 1px solid var(--line); }
+    .tb-strip div:first-child { border-top: none; }
+  }
+  @media (max-width: 520px) {
+    .stages { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="titleblock">
+    <div class="tb-main">
+      <div>
+        <p class="eyebrow">vibe coding 課程教材 · 架構示例</p>
+        <h1>漸進式四階段架構</h1>
+      </div>
+      <div class="tb-meta">
+        <span>建商員工班 · 非資訊背景</span>
+        <span>總時長 3 小時</span>
+      </div>
+    </div>
+    <div class="tb-strip">
+      <div>階段數 <strong>4 個</strong></div>
+      <div>難度曲線 <strong>逐步疊加，不推翻重來</strong></div>
+      <div>共通工具 <strong>Claude／ChatGPT 對話生成</strong></div>
+    </div>
+  </header>
+
+  <div class="axis">
+    <span class="axis-label">難度</span>
+    <div class="axis-track"><span></span><span></span><span></span><span></span></div>
+    <span class="axis-label">累積提升 →</span>
+  </div>
+
+  <div class="stages">
+    <!-- 階段 1 -->
+    <div class="stage">
+      <div class="stage-head">
+        <div class="stage-no">STAGE 01</div>
+        <h3>資訊網站</h3>
+        <div class="skill">從一段需求文字，生成單頁介紹網站</div>
+      </div>
+      <div class="mock-browser">
+        <div class="mock-chrome"><i></i><i></i><i></i><span class="url">翠湖苑・建案介紹</span></div>
+        <div class="mock-scene scene-1">
+          <div class="hero"><span class="hero-title">翠湖苑</span></div>
+          <div class="body">
+            <div class="ln"></div>
+            <div class="ln short"></div>
+            <div class="ln"></div>
+          </div>
+        </div>
+      </div>
+      <div class="stage-foot"><strong>新能力：</strong>學會怎麼把需求講清楚給AI（prompt），第一次看到「文字變成一個網頁」。</div>
+    </div>
+
+    <!-- 階段 2 -->
+    <div class="stage">
+      <div class="stage-head">
+        <div class="stage-no">STAGE 02</div>
+        <h3>資訊網站・改圖片</h3>
+        <div class="skill">同一份網站，練習對話式修改</div>
+      </div>
+      <div class="mock-browser">
+        <div class="mock-chrome"><i></i><i></i><i></i><span class="url">翠湖苑・建案介紹</span></div>
+        <div class="mock-scene scene-2">
+          <span class="swap-badge">已換素材</span>
+          <div class="hero"><span class="hero-title">翠湖苑</span></div>
+          <div class="body">
+            <div class="ln"></div>
+            <div class="ln short"></div>
+            <div class="ln"></div>
+          </div>
+        </div>
+      </div>
+      <div class="stage-foot"><strong>新能力：</strong>「跟AI說『把這張圖換成OO風格』」——理解生成結果是可以再對話迭代的，不用重寫。</div>
+    </div>
+
+    <!-- 階段 3 -->
+    <div class="stage">
+      <div class="stage-head">
+        <div class="stage-no">STAGE 03</div>
+        <h3>靜態儀表板</h3>
+        <div class="skill">把 Excel 進度表變成資料視覺化網頁</div>
+      </div>
+      <div class="mock-browser">
+        <div class="mock-chrome"><i></i><i></i><i></i><span class="url">建案進度・快照</span></div>
+        <div class="mock-scene scene-3">
+          <div class="kpis">
+            <div class="kpi"><div class="v">55%</div><div class="l">平均</div></div>
+            <div class="kpi"><div class="v">2</div><div class="l">落後</div></div>
+            <div class="kpi"><div class="v">78%</div><div class="l">銷售</div></div>
+          </div>
+          <div class="rows">
+            <div class="row"><span class="name"></span><span class="track"><span class="fill" style="width:68%"></span></span></div>
+            <div class="row"><span class="name"></span><span class="track"><span class="fill" style="width:40%"></span></span></div>
+            <div class="row"><span class="name"></span><span class="track"><span class="fill" style="width:91%"></span></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="stage-foot"><strong>新能力：</strong>第一次處理「有欄位結構的資料」，理解表格→圖表的對應關係。</div>
+    </div>
+
+    <!-- 階段 4 -->
+    <div class="stage">
+      <div class="stage-head">
+        <div class="stage-no">STAGE 04</div>
+        <h3>可互動化儀表板</h3>
+        <div class="skill">上傳一份新 CSV，畫面即時重繪</div>
+      </div>
+      <div class="mock-browser">
+        <div class="mock-chrome"><i></i><i></i><i></i><span class="url">建案進度・可上傳</span></div>
+        <div class="mock-scene scene-4">
+          <div class="upload"><span class="dot"></span><span>上傳 CSV →</span></div>
+          <div class="kpis">
+            <div class="kpi"><div class="v">61%</div><div class="l">平均</div></div>
+            <div class="kpi"><div class="v">1</div><div class="l">落後</div></div>
+            <div class="kpi"><div class="v">85%</div><div class="l">銷售</div></div>
+          </div>
+          <div class="rows">
+            <div class="row"><span class="name"></span><span class="track"><span class="fill" style="width:80%"></span></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="stage-foot"><strong>新能力：</strong>接觸「事件與狀態」——資料一換，畫面跟著算。順勢帶出「要即時同步就得接資料庫」的邊界。</div>
+    </div>
+  </div>
+
+  <div class="notice">
+    <strong>四階段共用同一個subject（翠湖苑建案）</strong>，只是每階段疊加一個新變數——這樣學員不用每階段重新理解情境，注意力可以完全放在「這階段新學的那一個能力」上。
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2><span class="sheet-no">A&#8209;02</span>階段對照表</h2>
+      <span class="hint">供投影片／講義直接引用</span>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>階段</th>
+            <th>學員產出</th>
+            <th>這階段疊加的新概念</th>
+            <th>成就感來源</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tag">STAGE 01</td>
+            <td>單頁資訊網站</td>
+            <td>怎麼把需求講清楚給AI（prompt結構）</td>
+            <td>「一段話變成一個網頁」的第一次震撼</td>
+          </tr>
+          <tr>
+            <td class="tag">STAGE 02</td>
+            <td>同一網站・換素材版</td>
+            <td>對話式迭代修改，不用重寫</td>
+            <td>「這是我調出來的樣子」的擁有感</td>
+          </tr>
+          <tr>
+            <td class="tag">STAGE 03</td>
+            <td>靜態進度儀表板</td>
+            <td>資料欄位結構、表格→圖表的對應</td>
+            <td>自己部門的Excel變成一份「看起來很專業」的報表</td>
+          </tr>
+          <tr>
+            <td class="tag">STAGE 04</td>
+            <td>可上傳互動儀表板</td>
+            <td>事件與狀態、靜態快照的邊界在哪</td>
+            <td>「換一份資料，畫面真的會動」的互動爽感</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>vibe coding 課程教材 · 漸進式四階段架構示例</footer>
+</div>

@@ -1,6 +1,8 @@
-# 建案進度監控儀表板（示範）
+# Stage 04 · 可互動化儀表板
 
-純 HTML／JavaScript 的靜態儀表板示範，用於「vibe coding」課程教材。
+純 HTML／JavaScript 的儀表板，支援上傳CSV即時重繪，用於「vibe coding」課程教材。
+是 `../03-static-dashboard/`（資料寫死的靜態版）的進階版，兩者用同一套視覺風格，
+建議並排展示做對照。
 
 ## 怎麼用
 

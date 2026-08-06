@@ -1,0 +1,222 @@
+<title>翠湖苑 · 建案介紹</title>
+<style>
+  :root {
+    --bg: #f6f1e7;
+    --bg-panel: #fffdf8;
+    --ink: #241d14;
+    --ink-dim: #7a6f5c;
+    --line: #e3d8c4;
+    --accent: #b5652f;
+    --accent-soft: #f3e2d1;
+    --sky-a: #cfe0e0;
+    --sky-b: #9fb9bd;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1712; --bg-panel: #241f18; --ink: #f0e9db; --ink-dim: #b0a48c;
+      --line: #3a3225; --accent: #d98a52; --accent-soft: #3a2a1c;
+      --sky-a: #33474a; --sky-b: #1e2c2e;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1712; --bg-panel: #241f18; --ink: #f0e9db; --ink-dim: #b0a48c;
+    --line: #3a3225; --accent: #d98a52; --accent-soft: #3a2a1c;
+    --sky-a: #33474a; --sky-b: #1e2c2e;
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f1e7; --bg-panel: #fffdf8; --ink: #241d14; --ink-dim: #7a6f5c;
+    --line: #e3d8c4; --accent: #b5652f; --accent-soft: #f3e2d1;
+    --sky-a: #cfe0e0; --sky-b: #9fb9bd;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    line-height: 1.6;
+  }
+  h1, h2 { font-family: Georgia, "Noto Serif TC", serif; text-wrap: balance; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── 頂列 ── */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 0; max-width: 880px; margin: 0 auto; padding-left: 24px; padding-right: 24px;
+  }
+  .wordmark { font-family: Georgia, "Noto Serif TC", serif; font-size: 18px; font-weight: 700; letter-spacing: 0.04em; }
+  .topbar nav { font-size: 13px; color: var(--ink-dim); display: flex; gap: 22px; }
+
+  /* ── Hero：CSS 繪製的立面示意 ── */
+  .facade-wrap {
+    height: 260px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--sky-a), var(--sky-b) 70%);
+  }
+  .facade {
+    position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+    width: 420px; height: 200px;
+    background: #d8c6ab;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 6px;
+    padding: 10px;
+  }
+  @media (prefers-color-scheme: dark) { .facade { background: #4a3f30; } }
+  :root[data-theme="dark"] .facade { background: #4a3f30; }
+  .facade span {
+    background: linear-gradient(160deg, #eef3f0, #b7c7c2);
+    opacity: 0.9;
+  }
+  .facade span:nth-child(3n) { opacity: 0.55; }
+  .facade span:nth-child(5n) { opacity: 0.75; }
+  .ground {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 26px;
+    background: var(--bg);
+  }
+  .hero-copy {
+    text-align: center;
+    padding: 34px 0 46px;
+  }
+  .hero-eyebrow {
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 12px; font-weight: 700;
+  }
+  .hero-copy h1 { font-size: 34px; margin: 0 0 14px; }
+  .hero-copy p { color: var(--ink-dim); font-size: 15px; max-width: 480px; margin: 0 auto 22px; }
+  .cta {
+    display: inline-block; background: var(--accent); color: #fff;
+    padding: 11px 26px; font-size: 13.5px; font-weight: 700; letter-spacing: 0.02em;
+    border-radius: 2px; text-decoration: none;
+  }
+
+  /* ── 特色 ── */
+  .features {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    padding: 50px 0;
+    border-top: 1px solid var(--line);
+  }
+  .feature h3 { font-size: 15px; margin: 0 0 8px; font-weight: 700; }
+  .feature p { font-size: 13px; color: var(--ink-dim); margin: 0; }
+  .feature .mark {
+    width: 28px; height: 2px; background: var(--accent); margin-bottom: 14px;
+  }
+
+  /* ── 格局配置 ── */
+  .plans { padding: 50px 0; border-top: 1px solid var(--line); }
+  .section-label {
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin: 0 0 8px;
+  }
+  .plans h2 { font-size: 24px; margin: 0 0 24px; }
+  .plan-table { width: 100%; border-collapse: collapse; }
+  .plan-table th {
+    text-align: left; font-size: 12px; color: var(--ink-dim); font-weight: 700;
+    border-bottom: 1px solid var(--ink); padding: 8px 10px;
+  }
+  .plan-table td { padding: 13px 10px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .plan-table td.num { font-variant-numeric: tabular-nums; }
+
+  /* ── 生活機能 ── */
+  .life { padding: 50px 0; border-top: 1px solid var(--line); }
+  .life h2 { font-size: 24px; margin: 0 0 22px; }
+  .life ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 24px; }
+  .life li { font-size: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; color: var(--ink-dim); }
+  .life li strong { color: var(--ink); font-weight: 600; }
+
+  /* ── 聯絡 ── */
+  .contact {
+    padding: 44px 0 56px; border-top: 1px solid var(--line);
+    text-align: center;
+  }
+  .contact p { color: var(--ink-dim); font-size: 13.5px; margin: 6px 0 0; }
+  .contact .wordmark { display: block; margin-bottom: 10px; }
+
+  @media (max-width: 640px) {
+    .features { grid-template-columns: 1fr; }
+    .life ul { grid-template-columns: 1fr; }
+    .facade { width: 300px; }
+  }
+</style>
+
+<div class="topbar">
+  <span class="wordmark">翠湖苑</span>
+  <nav><span>建案特色</span><span>格局配置</span><span>生活機能</span><span>聯絡我們</span></nav>
+</div>
+
+<div class="facade-wrap">
+  <div class="facade">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="ground"></div>
+</div>
+
+<div class="wrap">
+  <div class="hero-copy">
+    <p class="hero-eyebrow">STAGE 01 · 資訊網站</p>
+    <h1>依山面湖，翠湖苑</h1>
+    <p>七期重劃區旁，一棟結合綠意與現代機能的低層電梯宅。從基地選址到公共空間，每一处細節都以居住尺度重新設計。</p>
+    <a class="cta" href="#contact">預約賞屋</a>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="mark"></div>
+      <h3>基地位置</h3>
+      <p>緊鄰翠湖公園，步行3分鐘可達捷運站，周邊學區、市場、醫院機能齊全。</p>
+    </div>
+    <div class="feature">
+      <div class="mark"></div>
+      <h3>建材規格</h3>
+      <p>結構外牆採清水模工法，戶戶三面採光，對外窗使用低輻射複層玻璃。</p>
+    </div>
+    <div class="feature">
+      <div class="mark"></div>
+      <h3>公共設施</h3>
+      <p>一樓大廳挑高6米，屋頂設置空中花園與健身房，公設比控制在28%。</p>
+    </div>
+  </div>
+
+  <div class="plans">
+    <p class="section-label">Floor Plans</p>
+    <h2>格局配置</h2>
+    <table class="plan-table">
+      <thead>
+        <tr><th>戶型</th><th>坪數</th><th>格局</th><th>戶數</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>A棟 2房</td><td class="num">28坪</td><td>2房2廳1衛</td><td class="num">40戶</td></tr>
+        <tr><td>A棟 3房</td><td class="num">38坪</td><td>3房2廳2衛</td><td class="num">60戶</td></tr>
+        <tr><td>B棟 3房+</td><td class="num">45坪</td><td>3+1房2廳2衛</td><td class="num">50戶</td></tr>
+        <tr><td>B棟 頂樓戶</td><td class="num">62坪</td><td>4房2廳3衛</td><td class="num">30戶</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="life">
+    <p class="section-label">Neighborhood</p>
+    <h2>生活機能</h2>
+    <ul>
+      <li><strong>翠湖公園</strong><span>步行 3 分鐘</span></li>
+      <li><strong>捷運翠湖站</strong><span>步行 5 分鐘</span></li>
+      <li><strong>翠湖國小</strong><span>步行 8 分鐘</span></li>
+      <li><strong>翠湖傳統市場</strong><span>步行 6 分鐘</span></li>
+      <li><strong>國泰綜合醫院</strong><span>車程 10 分鐘</span></li>
+      <li><strong>翠湖高中</strong><span>車程 12 分鐘</span></li>
+    </ul>
+  </div>
+
+  <div class="contact" id="contact">
+    <span class="wordmark">翠湖苑</span>
+    <p>接待中心｜翠湖路 88 號（近翠湖公園東側入口）</p>
+    <p>本頁為 vibe coding 課程 Stage 01 教材示例，內容為虛構建案，非真實銷售資訊。</p>
+  </div>
+</div>
