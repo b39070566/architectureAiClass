@@ -1,0 +1,499 @@
+<title>建案進度儀表板</title>
+<style>
+  :root {
+    color-scheme: light dark;
+
+    --paper:   #fbfaf7;
+    --ink:     #1b1c1a;
+    --ink-2:   #55574f;
+    --ink-3:   #86887f;
+    --rule:    #ddd9d0;
+    --rule-2:  #c3beb2;
+
+    --accent:  #35566b;
+    --good:    #3f6b48;
+    --warn:    #8a6524;
+    --crit:    #93402f;
+
+    --serif: "Noto Serif TC", "Songti TC", "Source Han Serif TC", Georgia, serif;
+    --sans:  "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", -apple-system, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:  #15171a;
+      --ink:    #e8e6e0;
+      --ink-2:  #a5a79f;
+      --ink-3:  #74766f;
+      --rule:   #2c2f33;
+      --rule-2: #414549;
+      --accent: #8fb3c9;
+      --good:   #86b38e;
+      --warn:   #d0a75e;
+      --crit:   #d18a78;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 單欄版心。這一頁刻意不用任何卡片或方框，
+     分段全靠留白與細線——就像一份排版乾淨的紙本報告。 */
+  .sheet { max-width: 760px; margin: 0 auto; padding: 72px 32px 96px; }
+
+  /* ── 抬頭 ── */
+  .masthead { margin-bottom: 56px; }
+  .masthead h1 {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0 0 14px;
+  }
+  .standfirst {
+    margin: 0;
+    max-width: 34em;
+    color: var(--ink-2);
+    font-size: 14.5px;
+    line-height: 2;
+  }
+  .dateline {
+    margin: 22px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--ink-3);
+    display: flex;
+    gap: 26px;
+    flex-wrap: wrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── 摘要數字：不是四張卡片，是一段有階層的文字 ── */
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 34px 28px;
+    margin: 0 0 60px;
+  }
+  .figure dt {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+  .figure dd {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .figure .note {
+    display: block;
+    margin-top: 7px;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--ink-3);
+    letter-spacing: 0;
+  }
+
+  /* ── 章節標題 ── */
+  h2 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin: 0 0 4px;
+  }
+  .caption {
+    margin: 0 0 22px;
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+
+  /* ── 表格：傳統印刷表格，橫線分隔，無外框無底色 ── */
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 600px; }
+  caption { caption-side: bottom; text-align: left; padding-top: 16px; font-size: 12.5px; color: var(--ink-3); }
+  thead th {
+    text-align: left;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-3);
+    padding: 0 14px 9px 0;
+    border-bottom: 1px solid var(--rule-2);
+    white-space: nowrap;
+  }
+  thead th.right, tbody td.right { text-align: right; }
+  thead th:last-child, tbody td:last-child { padding-right: 0; }
+  tbody td {
+    padding: 13px 14px 13px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+    vertical-align: baseline;
+  }
+  tbody td.right { font-variant-numeric: tabular-nums; }
+  tbody .site { font-weight: 600; }
+
+  /* 進度：一條細線，不是有邊框的元件 */
+  .bar { display: flex; align-items: center; gap: 11px; min-width: 150px; }
+  .bar-track { flex: 1; height: 3px; background: var(--rule); }
+  .bar-fill { display: block; height: 100%; background: var(--accent); }
+  .bar-fill.good { background: var(--good); }
+  .bar-fill.warn { background: var(--warn); }
+  .bar-fill.crit { background: var(--crit); }
+  .bar-pct { font-variant-numeric: tabular-nums; font-size: 13px; color: var(--ink-2); width: 36px; text-align: right; }
+
+  /* 狀態：一個色點加文字，不做藥丸標籤 */
+  .status { display: inline-flex; align-items: baseline; gap: 7px; font-size: 13.5px; white-space: nowrap; }
+  .status::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+    transform: translateY(-1px);
+  }
+  .status.good { color: var(--good); }
+  .status.warn { color: var(--warn); }
+  .status.crit { color: var(--crit); }
+
+  /* ── 資料來源區 ── */
+  .source {
+    margin-top: 64px;
+    padding-top: 26px;
+    border-top: 1px solid var(--rule-2);
+  }
+  .source-line { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    padding: 2px 0;
+    cursor: pointer;
+    line-height: 1.6;
+  }
+  .btn:hover, .btn:focus-within, .btn:focus-visible { color: var(--accent); border-color: var(--accent); }
+  .btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .btn.plain { border-bottom-color: var(--rule-2); color: var(--ink-3); font-size: 13.5px; }
+  .btn.plain:hover, .btn.plain:focus-visible { color: var(--ink); border-color: var(--ink); }
+  #fileName { font-size: 13.5px; color: var(--ink-3); }
+
+  .source p {
+    margin: 16px 0 0;
+    font-size: 13px;
+    line-height: 1.95;
+    color: var(--ink-3);
+    max-width: 40em;
+  }
+
+  .alert {
+    margin: 20px 0 0;
+    padding: 14px 0 14px 16px;
+    border-left: 2px solid var(--crit);
+    color: var(--crit);
+    font-size: 13.5px;
+    line-height: 1.85;
+    white-space: pre-line;
+  }
+
+  footer {
+    margin-top: 70px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-size: 12.5px;
+    color: var(--ink-3);
+  }
+
+  :focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bar-fill { transition: width .45s ease; }
+  }
+
+  @media (max-width: 680px) {
+    .sheet { padding: 48px 22px 72px; }
+    .figures { grid-template-columns: repeat(2, 1fr); gap: 30px 24px; }
+    .masthead h1 { font-size: 25px; }
+  }
+</style>
+
+<div class="sheet">
+  <header class="masthead">
+    <h1>建案進度週報</h1>
+    <p class="standfirst" id="standfirst">
+      各案場施工進度與銷售狀況的一份快照。數字取自進度表，非即時連線。
+    </p>
+    <p class="dateline">
+      <span id="snapTime">快照時間 —</span>
+      <span id="siteCount">— 個案場</span>
+      <span id="sourceName">資料來源 內建示範資料</span>
+    </p>
+  </header>
+
+  <dl class="figures" id="figures"></dl>
+
+  <section>
+    <h2>各案場進度</h2>
+    <p class="caption">依完成率由高至低排列。</p>
+    <div class="table-scroll">
+      <table>
+        <caption id="tableNote">全案場合計。狀態欄的判定同時參考「狀態」欄位與完成率。</caption>
+        <thead>
+          <tr>
+            <th>案場</th>
+            <th>階段</th>
+            <th>完成進度</th>
+            <th class="right">已售戶數</th>
+            <th class="right">總戶數</th>
+            <th>狀態</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="source" id="sourceBlock">
+    <h2>換一份資料</h2>
+    <div class="source-line">
+      <label class="btn">
+        選擇 CSV 檔案
+        <input type="file" id="csvInput" accept=".csv" />
+      </label>
+      <span id="fileName">目前顯示示範資料</span>
+      <button class="btn plain" id="resetBtn">還原示範資料</button>
+    </div>
+    <div class="alert" id="errorBanner" hidden></div>
+    <p>
+      檔案只在你的瀏覽器裡運算，不會傳送到任何伺服器，也不會被儲存——重新整理頁面就會回到示範資料。
+      Excel 另存新檔時請選「CSV UTF-8（逗號分隔）」，選成最上面那個「CSV」會是 Big5 編碼，中文容易變亂碼。
+    </p>
+  </section>
+
+  <footer id="footNote">資料為虛構示範內容，非真實銷售或施工資訊。</footer>
+</div>
+
+<script>
+  const SAMPLE_CSV = `案名,階段,完成率,已售戶數,總戶數,狀態
+沐森,結構體施工,68,142,180,正常
+河岸首席,基礎開挖,22,45,220,落後
+青田大院,裝修工程,91,98,100,正常
+松風雅築,結構體施工,54,60,150,正常
+南港雲頂,基礎開挖,12,30,260,落後
+瑞光公館,裝修工程,97,88,90,即將完工
+文心一號,結構體施工,40,110,300,正常
+`;
+
+  // Stage 03 模式：?stage=3 會把「換一份資料」整段收起來，
+  // 讓同一份檔案先當成「資料寫死的靜態版」來講，講完痛點再把上傳揭露出來。
+  const STATIC_MODE = new URLSearchParams(location.search).get('stage') === '3';
+
+  const fileInput = document.getElementById('csvInput');
+  const fileNameEl = document.getElementById('fileName');
+  const resetBtn = document.getElementById('resetBtn');
+  const sourceNameEl = document.getElementById('sourceName');
+  const errorBanner = document.getElementById('errorBanner');
+
+  const REQUIRED_HEADERS = ['案名', '階段', '完成率', '已售戶數', '總戶數', '狀態'];
+
+  // 支援雙引號包裹欄位（欄位裡有逗號時），並正確處理逃脫的雙引號 ""
+  function splitCSVLine(line) {
+    const cells = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (line[i + 1] === '"') { cur += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          cur += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        cells.push(cur.trim());
+        cur = '';
+      } else {
+        cur += ch;
+      }
+    }
+    cells.push(cur.trim());
+    return cells;
+  }
+
+  function parseCSV(text) {
+    // 去掉 UTF-8 BOM（Windows Excel／記事本存檔常見）
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+    const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
+    if (lines.length < 2) {
+      throw new Error('檔案內容是空的，或只有標題列沒有資料。');
+    }
+    const headers = splitCSVLine(lines[0]);
+    const missing = REQUIRED_HEADERS.filter(h => !headers.includes(h));
+    if (missing.length) {
+      throw new Error(
+        `找不到欄位：${missing.join('、')}。\n` +
+        `目前偵測到的欄位是：${headers.join('、')}\n` +
+        `必須包含：${REQUIRED_HEADERS.join('、')}`
+      );
+    }
+    return lines.slice(1).map(line => {
+      const cells = splitCSVLine(line);
+      const row = {};
+      headers.forEach((h, i) => row[h] = cells[i] ?? '');
+      return row;
+    });
+  }
+
+  // 判斷解碼後的文字是否看起來像亂碼（大量 U+FFFD 取代字元，或幾乎沒有中文字）
+  function looksGarbled(text) {
+    const replacementCount = (text.match(/\uFFFD/g) || []).length;
+    if (replacementCount > 0) return true;
+    const cjkCount = (text.match(/[一-鿿]/g) || []).length;
+    const hasAsciiLetters = /[A-Za-z]{3,}/.test(text.slice(0, 200));
+    return cjkCount === 0 && !hasAsciiLetters;
+  }
+
+  // 依序嘗試 UTF-8、Big5 解碼，挑第一個看起來正常的結果
+  // （Windows Excel「另存新檔→CSV」預設是 Big5，不是 UTF-8）
+  function decodeCSVBuffer(buffer) {
+    try {
+      const utf8Text = new TextDecoder('utf-8', { fatal: true }).decode(buffer);
+      if (!looksGarbled(utf8Text)) return utf8Text;
+    } catch (e) { /* not valid UTF-8, fall through */ }
+    try {
+      const big5Text = new TextDecoder('big5').decode(buffer);
+      if (!looksGarbled(big5Text)) return big5Text;
+    } catch (e) { /* browser may not support big5 decoder */ }
+    // 兩種都失敗，回傳寬鬆的 UTF-8 解碼結果，讓後續錯誤訊息至少看得出結構
+    return new TextDecoder('utf-8').decode(buffer);
+  }
+
+  function statusClass(status, rate) {
+    if (status === '落後') return 'crit';
+    if (status === '即將完工') return 'good';
+    if (rate < 30) return 'crit';
+    if (rate < 60) return 'warn';
+    return 'good';
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+  }
+
+  function render(rows) {
+    rows = rows
+      .map(r => ({...r, 完成率: Number(r.完成率), 已售戶數: Number(r.已售戶數), 總戶數: Number(r.總戶數)}))
+      .filter(r => r.案名 && !Number.isNaN(r.完成率));
+    if (!rows.length) {
+      throw new Error('資料列讀不到有效內容，請檢查「完成率」「已售戶數」「總戶數」是否都是數字。');
+    }
+    rows.sort((a, b) => b.完成率 - a.完成率);
+
+    document.getElementById('siteCount').textContent = rows.length + ' 個案場';
+    document.getElementById('snapTime').textContent = '快照時間 ' +
+      new Date().toLocaleString('zh-TW', { hour12: false });
+
+    const avg = (rows.reduce((s, r) => s + r.完成率, 0) / rows.length).toFixed(1);
+    const behind = rows.filter(r => r.狀態 === '落後').length;
+    const totalSold = rows.reduce((s, r) => s + r.已售戶數, 0);
+    const totalUnits = rows.reduce((s, r) => s + r.總戶數, 0);
+
+    const figures = [
+      { label: '平均完成率', value: avg + '%', note: `${rows.length} 個案場平均` },
+      { label: '落後案場', value: behind, note: behind > 0 ? '需要關注' : '無落後案場' },
+      { label: '已售戶數', value: totalSold.toLocaleString(), note: `總戶數 ${totalUnits.toLocaleString()}` },
+      { label: '整體銷售率', value: Math.round(totalSold / totalUnits * 100) + '%', note: '全案場加總計算' },
+    ];
+    document.getElementById('figures').innerHTML = figures.map(f => `
+      <div class="figure">
+        <dt>${esc(f.label)}</dt>
+        <dd>${esc(f.value)}<span class="note">${esc(f.note)}</span></dd>
+      </div>
+    `).join('');
+
+    document.getElementById('tbody').innerHTML = rows.map(r => {
+      const cls = statusClass(r.狀態, r.完成率);
+      return `
+        <tr>
+          <td class="site">${esc(r.案名)}</td>
+          <td>${esc(r.階段)}</td>
+          <td>
+            <div class="bar">
+              <span class="bar-track"><span class="bar-fill ${cls}" style="width:${r.完成率}%"></span></span>
+              <span class="bar-pct">${r.完成率}%</span>
+            </div>
+          </td>
+          <td class="right">${r.已售戶數}</td>
+          <td class="right">${r.總戶數}</td>
+          <td><span class="status ${cls}">${esc(r.狀態)}</span></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function showError(msg) {
+    errorBanner.textContent = '上傳失敗：' + msg;
+    errorBanner.hidden = false;
+  }
+  function clearError() {
+    errorBanner.hidden = true;
+    errorBanner.textContent = '';
+  }
+
+  if (STATIC_MODE) {
+    document.getElementById('sourceBlock').hidden = true;
+    document.getElementById('standfirst').textContent =
+      '各案場施工進度與銷售狀況的一份快照。這一版的數字直接寫在網頁檔案裡，要更新就得重做一次整份網頁。';
+  } else {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const text = decodeCSVBuffer(ev.target.result);
+          const rows = parseCSV(text);
+          render(rows);
+          clearError();
+          fileNameEl.textContent = '目前顯示 ' + file.name;
+          sourceNameEl.textContent = '資料來源 ' + file.name;
+        } catch (err) {
+          showError(err.message || String(err));
+        }
+      };
+      reader.onerror = () => showError('檔案讀取失敗，請確認檔案沒有損壞。');
+      reader.readAsArrayBuffer(file);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      clearError();
+      render(parseCSV(SAMPLE_CSV));
+      fileNameEl.textContent = '目前顯示示範資料';
+      sourceNameEl.textContent = '資料來源 內建示範資料';
+    });
+  }
+
+  render(parseCSV(SAMPLE_CSV));
+</script>
