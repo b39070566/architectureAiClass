@@ -1,0 +1,11 @@
+{
+  "name": "vibe-coding-workshop-slides",
+  "private": true,
+  "description": "三小時 vibe coding 課程簡報的產生程式",
+  "scripts": {
+    "build": "node build.js && mv -f vibe-coding-workshop.pptx ../vibe-coding-workshop.pptx"
+  },
+  "dependencies": {
+    "pptxgenjs": "4.0.1"
+  }
+}

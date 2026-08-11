@@ -5,24 +5,25 @@ pres.layout = "LAYOUT_WIDE";           // 13.333 x 7.5
 pres.author = "vibe coding 工作坊";
 pres.title = "三小時，做出自己的網頁";
 
-/* ── 色票：沿用課程教材識別 ── */
-const INK      = "16201D";  // 深松綠近黑
-const INK_2    = "2C3A36";
-const PAPER    = "E9ECEB";  // 清水模冷灰
+/* ── 色票：與 demos/ 的紙本色系一致 ── */
+const INK      = "1B1C1A";  // 墨
+const INK_2    = "55574F";
+const PAPER    = "FBFAF7";  // 暖白紙
 const CARD     = "FFFFFF";
-const MUTED    = "6B7573";
-const MUTED_LT = "9AA4A1";
-const RULE     = "C3C9C7";
-const BRASS    = "8A6A3E";  // 建案網站段
-const BRASS_LT = "C2A272";
-const BLUE     = "1C4D78";  // 儀表板段
-const BLUE_LT  = "7FB3D8";
-const GOOD     = "3A7D44";
-const WARN     = "A8721C";
-const CRIT     = "A8352C";
+const MUTED    = "86887F";
+const MUTED_LT = "A5A79F";
+const RULE     = "DDD9D0";
+const RULE_2   = "C3BEB2";
+const BRASS    = "8A6524";  // 建案網站段
+const BRASS_LT = "D0A75E";
+const BLUE     = "35566B";  // 儀表板段
+const BLUE_LT  = "8FB3C9";
+const GOOD     = "3F6B48";
+const WARN     = "8A6524";
+const CRIT     = "93402F";
 
 const FS = "Microsoft JhengHei";   // 中文
-const FM = "Courier New";          // 等寬標籤
+const FM = "Consolas";             // 只用在真的是程式碼／檔名的地方
 
 const M = 0.65;                    // 邊界
 const W = 13.333 - M * 2;          // 內容寬 12.03
@@ -31,47 +32,48 @@ const W = 13.333 - M * 2;          // 內容寬 12.03
 function darkBg(s) {
   s.background = { color: INK };
 }
-function chip(s, code, accent, onDark) {
-  s.addShape(pres.ShapeType.rect, {
-    x: 12.05, y: 0.5, w: 0.72, h: 0.32,
-    fill: { color: onDark ? INK : PAPER },
-    line: { color: accent, width: 1 },
-  });
-  s.addText(code, {
-    x: 12.05, y: 0.5, w: 0.72, h: 0.32,
-    fontFace: FM, fontSize: 10, bold: true, color: accent,
-    align: "center", valign: "middle", margin: 0,
-  });
-}
+
+/* 頁面上方的小標。中文、不加字距、不做全大寫等寬那一套。 */
 function eyebrow(s, txt, color, x, y) {
   s.addText(txt, {
     x: x === undefined ? M : x, y: y === undefined ? 0.52 : y, w: 8, h: 0.3,
-    fontFace: FM, fontSize: 11, bold: true, color: color,
-    charSpacing: 2, margin: 0, valign: "middle",
-  });
-}
-function title(s, txt, color, y) {
-  s.addText(txt, {
-    x: M, y: y === undefined ? 0.92 : y, w: W - 1.1, h: 0.78,
-    fontFace: FS, fontSize: 33, bold: true, color: color || INK,
+    fontFace: FS, fontSize: 12, color: color || MUTED,
     margin: 0, valign: "middle",
   });
 }
+
+/* 標題，下面壓一條通欄細線——講義的標題就是這樣分段的 */
+function title(s, txt, color, y) {
+  const ty = y === undefined ? 0.92 : y;
+  s.addText(txt, {
+    x: M, y: ty, w: W, h: 0.78, fontFace: FS, fontSize: 32,
+    bold: true, color: color || INK, margin: 0, valign: "middle",
+  });
+  s.addShape(pres.ShapeType.line, {
+    x: M, y: ty + 0.86, w: W, h: 0, line: { color: RULE_2, width: 0.75 },
+  });
+}
+
+/* 原本是有邊框的白卡片，現在只在區塊頂端畫一條線。
+   幾何位置不變，所以每一頁的文字排版都不用動。 */
 function card(s, x, y, w, h, opts) {
   const o = opts || {};
-  s.addShape(pres.ShapeType.rect, {
-    x: x, y: y, w: w, h: h,
-    fill: { color: o.fill || CARD },
-    line: { color: o.line || RULE, width: o.lw || 1 },
+  if (o.fill && o.fill !== CARD) {
+    s.addShape(pres.ShapeType.rect, {
+      x: x, y: y, w: w, h: h, fill: { color: o.fill }, line: { color: o.fill, width: 0 },
+    });
+  }
+  s.addShape(pres.ShapeType.line, {
+    x: x, y: y, w: w, h: 0,
+    line: { color: o.line || RULE_2, width: o.lw || 0.75 },
   });
 }
 function note(s, txt) { s.addNotes(txt); }
 
 /* 內容頁底 */
-function light(code, accent) {
+function light() {
   const s = pres.addSlide();
   s.background = { color: PAPER };
-  if (code) chip(s, code, accent || BRASS, false);
   return s;
 }
 
@@ -82,7 +84,7 @@ function light(code, accent) {
   const s = pres.addSlide();
   darkBg(s);
   s.addText("建商員工 AI 應用工作坊", {
-    x: M, y: 2.2, w: 9, h: 0.34, fontFace: FM, fontSize: 12,
+    x: M, y: 2.2, w: 9, h: 0.34, fontFace: FS, fontSize: 12,
     color: BRASS_LT, charSpacing: 3, margin: 0,
   });
   s.addText("三小時，做出自己的網頁", {
@@ -105,14 +107,14 @@ function light(code, accent) {
 
 /* 2 今天的四個產出 */
 {
-  const s = light("A-01", BRASS);
-  eyebrow(s, "TODAY", BRASS);
+  const s = light();
+  eyebrow(s, "今天的產出", BRASS);
   title(s, "今天你會做出這四樣東西");
   const items = [
-    ["STAGE 01", "資訊網站", "把建案介紹變成一個網頁", BRASS],
-    ["STAGE 02", "加上自己的圖片", "換上你部門拍的照片", BRASS],
-    ["STAGE 03", "靜態儀表板", "把 Excel 進度表變成圖表", BLUE],
-    ["STAGE 04", "可互動儀表板", "換一份資料，畫面跟著算", BLUE],
+    ["第一段", "資訊網站", "把建案介紹變成一個網頁", BRASS],
+    ["第二段", "加上自己的圖片", "換上你部門拍的照片", BRASS],
+    ["第三段", "靜態儀表板", "把 Excel 進度表變成圖表", BLUE],
+    ["第四段", "可互動儀表板", "換一份資料，畫面跟著算", BLUE],
   ];
   const cw = 2.82, gap = 0.24;
   items.forEach((it, i) => {
@@ -123,7 +125,7 @@ function light(code, accent) {
     });
     s.addText(it[0], {
       x: x + 0.3, y: 2.92, w: cw - 0.6, h: 0.28,
-      fontFace: FM, fontSize: 10, bold: true, color: it[3], charSpacing: 1, margin: 0,
+      fontFace: FS, fontSize: 10, bold: true, color: it[3], charSpacing: 1, margin: 0,
     });
     s.addText(it[1], {
       x: x + 0.3, y: 3.28, w: cw - 0.6, h: 0.9,
@@ -142,8 +144,8 @@ function light(code, accent) {
 
 /* 3 期待管理 */
 {
-  const s = light("A-02", BRASS);
-  eyebrow(s, "EXPECTATIONS", BRASS);
+  const s = light();
+  eyebrow(s, "期待管理", BRASS);
   title(s, "先說清楚：今天不教你寫程式");
   const rows = [
     ["今天教的是", "怎麼把「你要什麼」講清楚給 AI 聽", GOOD],
@@ -155,7 +157,7 @@ function light(code, accent) {
     card(s, M, y, W, 0.98);
     s.addText(r[0], {
       x: M + 0.4, y: y, w: 2.6, h: 0.98,
-      fontFace: FM, fontSize: 11, bold: true, color: r[2], margin: 0, valign: "middle",
+      fontFace: FS, fontSize: 11, bold: true, color: r[2], margin: 0, valign: "middle",
     });
     s.addText(r[1], {
       x: M + 3.2, y: y, w: W - 3.6, h: 0.98,
@@ -171,8 +173,8 @@ function light(code, accent) {
 
 /* 4 時間分配 */
 {
-  const s = light("A-03", BRASS);
-  eyebrow(s, "SCHEDULE", BRASS);
+  const s = light();
+  eyebrow(s, "時間分配", BRASS);
   title(s, "三小時怎麼跑");
   const steps = [
     ["00:00", "45 min", "資訊網站", "學會下指令，做出第一個網頁", BRASS],
@@ -183,7 +185,7 @@ function light(code, accent) {
   steps.forEach((st, i) => {
     const y = 2.1 + i * 0.98;
     s.addText(st[0], {
-      x: M, y: y, w: 1.05, h: 0.8, fontFace: FM, fontSize: 15,
+      x: M, y: y, w: 1.05, h: 0.8, fontFace: FS, fontSize: 15,
       bold: true, color: st[4], margin: 0, valign: "middle",
     });
     s.addShape(pres.ShapeType.rect, {
@@ -198,7 +200,7 @@ function light(code, accent) {
       color: MUTED, margin: 0, valign: "middle",
     });
     s.addText(st[1], {
-      x: M + 10.4, y: y, w: 1.6, h: 0.8, fontFace: FM, fontSize: 12,
+      x: M + 10.4, y: y, w: 1.6, h: 0.8, fontFace: FS, fontSize: 12,
       color: MUTED, align: "right", margin: 0, valign: "middle",
     });
     if (i < 3) {
@@ -218,7 +220,7 @@ function divider(no, name, line1, line2, accent) {
   const s = pres.addSlide();
   darkBg(s);
   s.addText(no, {
-    x: M, y: 2.35, w: 4, h: 0.4, fontFace: FM, fontSize: 13,
+    x: M, y: 2.35, w: 4, h: 0.4, fontFace: FS, fontSize: 13,
     bold: true, color: accent, charSpacing: 4, margin: 0,
   });
   s.addText(name, {
@@ -240,7 +242,7 @@ function divider(no, name, line1, line2, accent) {
 }
 
 /* ══════════════════ STAGE 01 ══════════════════ */
-divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
+divider("第一段", "資訊網站", "把一段描述變成一個網頁",
         "這一段的重點是「怎麼說」，不是「怎麼寫」", BRASS_LT);
 
 /* 6 成品 */
@@ -249,7 +251,7 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
   s.background = { color: PAPER };
   s.addImage({ path: "p1.jpg", x: 5.983, y: 0, w: 7.35, h: 7.5 });
   s.addText("成品", {
-    x: M, y: 1.5, w: 4.6, h: 0.32, fontFace: FM, fontSize: 11,
+    x: M, y: 1.5, w: 4.6, h: 0.32, fontFace: FS, fontSize: 11,
     bold: true, color: BRASS, charSpacing: 2, margin: 0,
   });
   s.addText("這是三十分鐘做出來的", {
@@ -270,7 +272,7 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
 
 /* 7 核心觀念 */
 {
-  const s = light("B-01", BRASS);
+  const s = light();
   eyebrow(s, "核心觀念", BRASS);
   title(s, "你不是在寫程式，是在描述需求");
   card(s, M, 2.15, W, 1.5, { fill: "FFFFFF" });
@@ -289,7 +291,7 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
     const x = M + i * (5.9 + 0.25);
     card(s, x, 4.65, 5.9, 1.55);
     s.addText(p[0], {
-      x: x + 0.4, y: 4.9, w: 5.1, h: 0.32, fontFace: FM, fontSize: 10,
+      x: x + 0.4, y: 4.9, w: 5.1, h: 0.32, fontFace: FS, fontSize: 10,
       bold: true, color: MUTED, charSpacing: 1, margin: 0,
     });
     s.addText(p[1], {
@@ -302,8 +304,8 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
 
 /* 8 壞指令 vs 好指令 */
 {
-  const s = light("B-02", BRASS);
-  eyebrow(s, "COMPARE", BRASS);
+  const s = light();
+  eyebrow(s, "對照", BRASS);
   title(s, "同樣一件事，兩種說法");
   const cw = 5.9;
   // 壞
@@ -346,8 +348,8 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
 
 /* 9 好指令的四個要素 */
 {
-  const s = light("B-03", BRASS);
-  eyebrow(s, "CHECKLIST", BRASS);
+  const s = light();
+  eyebrow(s, "檢查清單", BRASS);
   title(s, "一個好指令，講滿這四件事");
   const four = [
     ["01", "做什麼", "一頁建案介紹網站"],
@@ -361,7 +363,7 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
       x: M, y: y, w: 0.52, h: 0.52, fill: { color: BRASS },
     });
     s.addText(f[0], {
-      x: M, y: y, w: 0.52, h: 0.52, fontFace: FM, fontSize: 12,
+      x: M, y: y, w: 0.52, h: 0.52, fontFace: FS, fontSize: 12,
       bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0,
     });
     s.addText(f[1], {
@@ -383,12 +385,12 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
 
 /* 10 動手練習 */
 {
-  const s = light("B-04", BRASS);
-  eyebrow(s, "PRACTICE · 25 min", BRASS);
+  const s = light();
+  eyebrow(s, "動手 · 25 分鐘", BRASS);
   title(s, "換你說說看");
   card(s, M, 2.1, W, 3.05, { fill: "FFFFFF" });
   s.addText("把這段填完，直接貼給 AI", {
-    x: M + 0.5, y: 2.35, w: W - 1.0, h: 0.35, fontFace: FM, fontSize: 11,
+    x: M + 0.5, y: 2.35, w: W - 1.0, h: 0.35, fontFace: FS, fontSize: 11,
     bold: true, color: BRASS, charSpacing: 1, margin: 0,
   });
   s.addText([
@@ -422,8 +424,8 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
 
 /* 11 不滿意怎麼辦 */
 {
-  const s = light("B-05", BRASS);
-  eyebrow(s, "TROUBLESHOOT", BRASS);
+  const s = light();
+  eyebrow(s, "卡住的時候", BRASS);
   title(s, "AI 給的不是你要的？");
   const tips = [
     ["不要重寫，用改的", "「其他都好，只要把格局表改成四欄」——AI 會只動那一塊"],
@@ -449,7 +451,7 @@ divider("STAGE 01", "資訊網站", "把一段描述變成一個網頁",
 }
 
 /* ══════════════════ STAGE 02 ══════════════════ */
-divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去",
+divider("第二段", "加上自己的圖片", "把你部門拍的照片放上去",
         "重點：網頁跟圖片檔，是怎麼連在一起的", BRASS_LT);
 
 /* 13 成品 */
@@ -458,7 +460,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
   s.background = { color: PAPER };
   s.addImage({ path: "p2.jpg", x: 0, y: 0, w: 7.35, h: 7.5 });
   s.addText("成品", {
-    x: 7.9, y: 1.5, w: 4.8, h: 0.32, fontFace: FM, fontSize: 11,
+    x: 7.9, y: 1.5, w: 4.8, h: 0.32, fontFace: FS, fontSize: 11,
     bold: true, color: BRASS, charSpacing: 2, margin: 0,
   });
   s.addText("同一個網站，\n換上自己的照片", {
@@ -480,7 +482,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
 
 /* 14 核心觀念 */
 {
-  const s = light("C-01", BRASS);
+  const s = light();
   eyebrow(s, "核心觀念", BRASS);
   title(s, "網頁不會把圖片存在裡面");
   card(s, M, 2.2, W, 1.55, { fill: INK, line: INK });
@@ -504,7 +506,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
       bold: true, color: INK, margin: 0,
     });
     s.addText(t[1], {
-      x: x + 0.42, y: 5.5, w: 5.1, h: 0.34, fontFace: FM, fontSize: 14,
+      x: x + 0.42, y: 5.5, w: 5.1, h: 0.34, fontFace: FS, fontSize: 14,
       bold: true, color: BRASS, margin: 0,
     });
     s.addText(t[2], {
@@ -517,8 +519,8 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
 
 /* 15 資料夾結構 */
 {
-  const s = light("C-02", BRASS);
-  eyebrow(s, "STRUCTURE", BRASS);
+  const s = light();
+  eyebrow(s, "資料夾結構", BRASS);
   title(s, "資料夾長什麼樣");
   card(s, M, 2.15, 6.6, 3.5, { fill: "FFFFFF" });
   s.addText([
@@ -563,7 +565,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
 
 /* 16 src 拆解 */
 {
-  const s = light("C-03", BRASS);
+  const s = light();
   eyebrow(s, "網頁裡是這樣寫的", BRASS);
   title(s, "看懂這一行就夠了");
   card(s, M, 2.15, W, 1.32, { fill: INK, line: INK });
@@ -602,8 +604,8 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
 
 /* 17 兩種換圖做法 */
 {
-  const s = light("C-04", BRASS);
-  eyebrow(s, "HOW-TO", BRASS);
+  const s = light();
+  eyebrow(s, "操作步驟", BRASS);
   title(s, "換成自己的照片，兩種做法");
   const cw = 5.9;
   const ways = [
@@ -614,7 +616,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
     const x = M + i * (cw + 0.25);
     card(s, x, 2.15, cw, 3.75);
     s.addText(w[0], {
-      x: x + 0.42, y: 2.42, w: cw - 0.84, h: 0.3, fontFace: FM, fontSize: 11,
+      x: x + 0.42, y: 2.42, w: cw - 0.84, h: 0.3, fontFace: FS, fontSize: 11,
       bold: true, color: w[4], charSpacing: 1, margin: 0,
     });
     s.addText(w[1], {
@@ -624,7 +626,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
     w[2].forEach((step, j) => {
       const sy = 3.45 + j * 0.6;
       s.addText(String(j + 1), {
-        x: x + 0.42, y: sy, w: 0.32, h: 0.32, fontFace: FM, fontSize: 11,
+        x: x + 0.42, y: sy, w: 0.32, h: 0.32, fontFace: FS, fontSize: 11,
         bold: true, color: w[4], align: "center", valign: "middle", margin: 0,
       });
       s.addText(step, {
@@ -647,8 +649,8 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
 
 /* 18 破圖檢查 */
 {
-  const s = light("C-05", BRASS);
-  eyebrow(s, "DEBUG", BRASS);
+  const s = light();
+  eyebrow(s, "排除問題", BRASS);
   title(s, "圖片破掉？先查這三件事");
   const checks = [
     ["檔名有沒有完全一樣", "Hero.jpg 和 hero.jpg 可能被當成兩個不同檔案，大小寫要對"],
@@ -662,7 +664,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
       x: M + 0.42, y: y + 0.4, w: 0.4, h: 0.4, fill: { color: WARN },
     });
     s.addText(String(i + 1), {
-      x: M + 0.42, y: y + 0.4, w: 0.4, h: 0.4, fontFace: FM, fontSize: 12,
+      x: M + 0.42, y: y + 0.4, w: 0.4, h: 0.4, fontFace: FS, fontSize: 12,
       bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0,
     });
     s.addText(c[0], {
@@ -681,7 +683,7 @@ divider("STAGE 02", "加上自己的圖片", "把你部門拍的照片放上去"
 }
 
 /* ══════════════════ STAGE 03 ══════════════════ */
-divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖表",
+divider("第三段", "靜態儀表板", "把 Excel 進度表變成看得懂的圖表",
         "從「做內容」換到「處理資料」", BLUE_LT);
 
 /* 20 成品 */
@@ -690,7 +692,7 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
   s.background = { color: PAPER };
   s.addImage({ path: "p3.jpg", x: 5.983, y: 0, w: 7.35, h: 7.5 });
   s.addText("成品", {
-    x: M, y: 1.5, w: 4.6, h: 0.32, fontFace: FM, fontSize: 11,
+    x: M, y: 1.5, w: 4.6, h: 0.32, fontFace: FS, fontSize: 11,
     bold: true, color: BLUE, charSpacing: 2, margin: 0,
   });
   s.addText("一張表格，\n變成一眼看懂的畫面", {
@@ -712,8 +714,8 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
 
 /* 21 觀念切換 */
 {
-  const s = light("D-01", BLUE);
-  eyebrow(s, "SHIFT", BLUE);
+  const s = light();
+  eyebrow(s, "換一種任務", BLUE);
   title(s, "這一段換了一種任務");
   const cw = 5.9;
   const cols = [
@@ -724,7 +726,7 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
     const x = M + i * (cw + 0.25);
     card(s, x, 2.15, cw, 3.4, i === 1 ? { line: BLUE, lw: 1.5 } : {});
     s.addText(c[0], {
-      x: x + 0.42, y: 2.42, w: cw - 0.84, h: 0.3, fontFace: FM, fontSize: 11,
+      x: x + 0.42, y: 2.42, w: cw - 0.84, h: 0.3, fontFace: FS, fontSize: 11,
       bold: true, color: c[3], charSpacing: 1, margin: 0,
     });
     s.addText(c[1], {
@@ -749,8 +751,8 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
 
 /* 22 好資料 vs 壞資料 */
 {
-  const s = light("D-02", BLUE);
-  eyebrow(s, "DATA", BLUE);
+  const s = light();
+  eyebrow(s, "關於資料", BLUE);
   title(s, "AI 看得懂的表格長什麼樣");
   const cw = 5.9;
   // 壞
@@ -801,8 +803,8 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
 
 /* 23 欄位對應 */
 {
-  const s = light("D-03", BLUE);
-  eyebrow(s, "MAPPING", BLUE);
+  const s = light();
+  eyebrow(s, "欄位對應", BLUE);
   title(s, "六個欄位，變成畫面上的什麼");
   const maps = [
     ["案名", "表格第一欄", MUTED],
@@ -818,7 +820,7 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
       bold: true, color: INK, margin: 0, valign: "middle",
     });
     s.addText("→", {
-      x: M + 3.7, y: y, w: 0.5, h: 0.62, fontFace: FM, fontSize: 15,
+      x: M + 3.7, y: y, w: 0.5, h: 0.62, fontFace: FS, fontSize: 15,
       color: m[2], margin: 0, valign: "middle",
     });
     s.addText(m[1], {
@@ -838,8 +840,8 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
 
 /* 24 實作 */
 {
-  const s = light("D-04", BLUE);
-  eyebrow(s, "PRACTICE · 30 min", BLUE);
+  const s = light();
+  eyebrow(s, "動手 · 30 分鐘", BLUE);
   title(s, "把你部門的表格丟進去");
   const steps = [
     ["01", "挑一張表", "你每週或每月都要看的那張，不用太大，十列以內就夠"],
@@ -853,7 +855,7 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
       x: M, y: y, w: 0.52, h: 0.52, fill: { color: BLUE },
     });
     s.addText(st[0], {
-      x: M, y: y, w: 0.52, h: 0.52, fontFace: FM, fontSize: 12,
+      x: M, y: y, w: 0.52, h: 0.52, fontFace: FS, fontSize: 12,
       bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0,
     });
     s.addText(st[1], {
@@ -873,8 +875,8 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
 
 /* 25 這版的限制 */
 {
-  const s = light("D-05", BLUE);
-  eyebrow(s, "LIMIT", BLUE);
+  const s = light();
+  eyebrow(s, "這一版的限制", BLUE);
   title(s, "但這一版有個麻煩");
   card(s, M, 2.2, W, 1.5, { fill: INK, line: INK });
   s.addText("數字是寫死在網頁裡的。資料一變，就要整個重做一次。", {
@@ -889,7 +891,7 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
   pain.forEach((p, i) => {
     const y = 4.05 + i * 0.78;
     s.addText(p[0], {
-      x: M, y: y, w: 1.7, h: 0.6, fontFace: FM, fontSize: 13,
+      x: M, y: y, w: 1.7, h: 0.6, fontFace: FS, fontSize: 13,
       bold: true, color: WARN, margin: 0, valign: "middle",
     });
     s.addText(p[1], {
@@ -905,7 +907,7 @@ divider("STAGE 03", "靜態儀表板", "把 Excel 進度表變成看得懂的圖
 }
 
 /* ══════════════════ STAGE 04 ══════════════════ */
-divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算",
+divider("第四段", "可互動儀表板", "換一份資料，畫面自己重算",
         "順便看清楚：這種做法的邊界在哪", BLUE_LT);
 
 /* 27 成品 */
@@ -914,7 +916,7 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
   s.background = { color: PAPER };
   s.addImage({ path: "p4.jpg", x: 0, y: 0, w: 7.35, h: 7.5 });
   s.addText("成品", {
-    x: 7.9, y: 1.5, w: 4.8, h: 0.32, fontFace: FM, fontSize: 11,
+    x: 7.9, y: 1.5, w: 4.8, h: 0.32, fontFace: FS, fontSize: 11,
     bold: true, color: BLUE, charSpacing: 2, margin: 0,
   });
   s.addText("多了一顆「上傳 CSV」", {
@@ -936,19 +938,19 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
 
 /* 28 三 vs 四 */
 {
-  const s = light("E-01", BLUE);
-  eyebrow(s, "COMPARE", BLUE);
+  const s = light();
+  eyebrow(s, "對照", BLUE);
   title(s, "同一份儀表板，差在哪");
   const cw = 5.9;
   const cmp = [
-    ["STAGE 03", "數字寫死", ["更新資料 = 重做一份網頁", "適合一次性的簡報", "檔案會愈積愈多"], MUTED],
-    ["STAGE 04", "可以換資料", ["更新資料 = 換一個檔案", "適合每週固定要出的報表", "網頁只要一份"], BLUE],
+    ["第三段", "數字寫死", ["更新資料 = 重做一份網頁", "適合一次性的簡報", "檔案會愈積愈多"], MUTED],
+    ["第四段", "可以換資料", ["更新資料 = 換一個檔案", "適合每週固定要出的報表", "網頁只要一份"], BLUE],
   ];
   cmp.forEach((c, i) => {
     const x = M + i * (cw + 0.25);
     card(s, x, 2.15, cw, 3.3, i === 1 ? { line: BLUE, lw: 1.5 } : {});
     s.addText(c[0], {
-      x: x + 0.42, y: 2.42, w: cw - 0.84, h: 0.3, fontFace: FM, fontSize: 11,
+      x: x + 0.42, y: 2.42, w: cw - 0.84, h: 0.3, fontFace: FS, fontSize: 11,
       bold: true, color: c[3], charSpacing: 1, margin: 0,
     });
     s.addText(c[1], {
@@ -973,8 +975,8 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
 
 /* 29 邊界 */
 {
-  const s = light("E-02", BLUE);
-  eyebrow(s, "BOUNDARY", BLUE);
+  const s = light();
+  eyebrow(s, "邊界", BLUE);
   title(s, "一個要記住的邊界");
   card(s, M, 2.2, W, 1.5, { fill: INK, line: INK });
   s.addText("這是「快照」，不是「即時系統」。", {
@@ -1006,8 +1008,8 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
 
 /* 30 何時需要資料庫 */
 {
-  const s = light("E-03", BLUE);
-  eyebrow(s, "NEXT LEVEL", BLUE);
+  const s = light();
+  eyebrow(s, "再往下一步", BLUE);
   title(s, "什麼時候才真的需要工程師");
   s.addText("以下三種需求，超出今天教的範圍 —— 但你已經知道怎麼把需求講清楚了。", {
     x: M, y: 1.85, w: W, h: 0.4, fontFace: FS, fontSize: 15, color: MUTED, margin: 0,
@@ -1041,8 +1043,8 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
 
 /* 31 CSV 編碼陷阱 */
 {
-  const s = light("E-04", BLUE);
-  eyebrow(s, "WINDOWS 注意", WARN);
+  const s = light();
+  eyebrow(s, "Windows 注意", WARN);
   title(s, "Excel 存 CSV 有個坑");
   card(s, M, 2.15, W, 1.35, { fill: "FFFFFF", line: WARN, lw: 1.5 });
   s.addText("另存新檔時，一定要選「CSV UTF-8（逗號分隔）」", {
@@ -1074,8 +1076,8 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
 
 /* 32 實作 */
 {
-  const s = light("E-05", BLUE);
-  eyebrow(s, "PRACTICE · 30 min", BLUE);
+  const s = light();
+  eyebrow(s, "動手 · 30 分鐘", BLUE);
   title(s, "換一份資料，看畫面自己算");
   const steps = [
     ["01", "先用範例檔跑一次", "確認上傳流程會動，知道畫面會怎麼變"],
@@ -1089,7 +1091,7 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
       x: M, y: y, w: 0.52, h: 0.52, fill: { color: BLUE },
     });
     s.addText(st[0], {
-      x: M, y: y, w: 0.52, h: 0.52, fontFace: FM, fontSize: 12,
+      x: M, y: y, w: 0.52, h: 0.52, fontFace: FS, fontSize: 12,
       bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0,
     });
     s.addText(st[1], {
@@ -1112,8 +1114,8 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
 
 /* 33 四階段回顧 */
 {
-  const s = light("F-01", BRASS);
-  eyebrow(s, "RECAP", BRASS);
+  const s = light();
+  eyebrow(s, "回顧", BRASS);
   title(s, "你今天學會的四件事");
   const recap = [
     ["01", "把需求講清楚", "四個要素：做什麼、關於誰、要有什麼、什麼調性", BRASS],
@@ -1125,7 +1127,7 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
     const y = 2.1 + i * 1.15;
     card(s, M, y, W, 0.98);
     s.addText(r[0], {
-      x: M + 0.42, y: y, w: 0.6, h: 0.98, fontFace: FM, fontSize: 15,
+      x: M + 0.42, y: y, w: 0.6, h: 0.98, fontFace: FS, fontSize: 15,
       bold: true, color: r[3], margin: 0, valign: "middle",
     });
     s.addText(r[1], {
@@ -1142,8 +1144,8 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
 
 /* 34 可以用在哪 */
 {
-  const s = light("F-02", BRASS);
-  eyebrow(s, "APPLY", BRASS);
+  const s = light();
+  eyebrow(s, "帶回去用", BRASS);
   title(s, "回去可以先做哪一件");
   const uses = [
     ["工地週報", "把每週的進度表做成儀表板，開會直接投影", BLUE],
@@ -1179,8 +1181,8 @@ divider("STAGE 04", "可互動儀表板", "換一份資料，畫面自己重算"
 {
   const s = pres.addSlide();
   darkBg(s);
-  s.addText("THE POINT", {
-    x: M, y: 2.3, w: 8, h: 0.34, fontFace: FM, fontSize: 12,
+  s.addText("帶走這句", {
+    x: M, y: 2.3, w: 8, h: 0.34, fontFace: FS, fontSize: 12,
     color: BRASS_LT, charSpacing: 3, margin: 0,
   });
   s.addText("你缺的從來不是技術，\n是有人告訴你「其實你可以」。", {
