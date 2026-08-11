@@ -1,0 +1,5 @@
+# PowerPoint 開檔時產生的暫存鎖檔
+~$*
+
+# Node
+node_modules/
