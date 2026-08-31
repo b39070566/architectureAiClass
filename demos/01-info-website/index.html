@@ -187,6 +187,51 @@
   .schedule .unit { font-family: var(--serif); letter-spacing: 0.09em; font-size: 16px; }
   .schedule .fig { font-variant-numeric: tabular-nums; font-size: 14px; color: var(--gold); }
 
+  /* ── 貸款試算 ── */
+  .loan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 76px; align-items: start; }
+  .loan-form { display: grid; gap: 26px; }
+  .loan-form .field { display: grid; gap: 10px; }
+  .loan-form label {
+    font-size: 12.5px; letter-spacing: 0.1em; color: var(--text-3);
+  }
+  .loan-form input, .loan-form select {
+    appearance: none; -webkit-appearance: none;
+    background: transparent; color: var(--text);
+    border: none; border-bottom: 1px solid var(--line-2);
+    padding: 10px 2px; font-size: 16px; font-family: var(--sans);
+    letter-spacing: 0.03em; font-variant-numeric: tabular-nums;
+  }
+  .loan-form select { cursor: pointer; }
+  .loan-form input:focus, .loan-form select:focus {
+    outline: none; border-bottom-color: var(--gold);
+  }
+  .cta-block {
+    width: 100%; text-align: center; background: transparent;
+    font-family: inherit; cursor: pointer; margin-top: 4px;
+  }
+  .loan-result { padding-top: 2px; }
+  .loan-result .index { margin-top: 0; }
+  .lead-gate {
+    margin-top: 46px; padding-top: 38px; border-top: 1px solid var(--line);
+  }
+  .lead-copy {
+    margin: 0 0 22px; font-size: 14px; line-height: 2; color: var(--text-2);
+    letter-spacing: 0.03em; max-width: 30em;
+  }
+  .lead-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
+  .lead-form input {
+    background: transparent; color: var(--text);
+    border: none; border-bottom: 1px solid var(--line-2);
+    padding: 10px 2px; font-size: 14.5px; font-family: var(--sans);
+    letter-spacing: 0.03em;
+  }
+  .lead-form input::placeholder { color: var(--text-3); }
+  .lead-form input:focus { outline: none; border-bottom-color: var(--gold); }
+  .lead-form .cta { grid-column: 1 / -1; width: 100%; text-align: center; background: transparent; font-family: inherit; cursor: pointer; }
+  .lead-done {
+    margin: 0; font-size: 14px; color: var(--gold-2); letter-spacing: 0.03em; line-height: 2;
+  }
+
   /* ── 頁尾 ── */
   .foot { border-top: 1px solid var(--line); padding: 98px 0 78px; }
   .foot-grid { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: end; }
@@ -213,6 +258,7 @@
     .marks { grid-template-columns: 1fr; gap: 46px; }
     .plates { grid-template-columns: 1fr; gap: 36px; }
     .plate .frame { aspect-ratio: 16 / 10; }
+    .loan-grid { grid-template-columns: 1fr; gap: 54px; }
     .topbar nav { gap: 20px; }
   }
   @media (max-width: 620px) {
@@ -220,6 +266,7 @@
     .band, .distance { padding: 84px 0; }
     .topbar nav a:nth-child(n+3) { display: none; }
     .foot-grid { grid-template-columns: 1fr; align-items: start; }
+    .lead-form { grid-template-columns: 1fr; }
   }
 </style>
 
@@ -232,6 +279,7 @@
       <a href="#design">規劃特色</a>
       <a href="#spaces">空間圖輯</a>
       <a href="#plans">格局配置</a>
+      <a href="#calc">貸款試算</a>
     </nav>
   </div>
 </header>
@@ -343,6 +391,60 @@
       </table>
     </div>
   </section>
+
+  <section class="band" id="calc">
+    <div class="shell">
+      <h2>貸款試算</h2>
+      <p class="sub">試算僅供參考，實際貸款成數、利率與核貸額度以銀行審核結果為準。</p>
+      <div class="loan-grid">
+        <form class="loan-form" id="loanForm">
+          <div class="field">
+            <label for="price">房屋總價（萬元）</label>
+            <input type="number" id="price" min="0" step="10" value="1800" required>
+          </div>
+          <div class="field">
+            <label for="downPct">自備款成數</label>
+            <select id="downPct">
+              <option value="20">2 成（20%）</option>
+              <option value="30" selected>3 成（30%）</option>
+              <option value="40">4 成（40%）</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="rate">貸款年利率（%）</label>
+            <input type="number" id="rate" min="0" step="0.01" value="2.15" required>
+          </div>
+          <div class="field">
+            <label for="years">貸款年限</label>
+            <select id="years">
+              <option value="20">20 年</option>
+              <option value="30" selected>30 年</option>
+              <option value="40">40 年</option>
+            </select>
+          </div>
+          <button type="submit" class="cta cta-block">開始試算</button>
+        </form>
+
+        <div class="loan-result" id="loanResult" hidden>
+          <ul class="index">
+            <li><span class="n">自備款</span><span class="dots"></span><span class="v" id="rDown">—</span></li>
+            <li><span class="n">貸款金額</span><span class="dots"></span><span class="v" id="rLoan">—</span></li>
+            <li><span class="n">每月本息攤還</span><span class="dots"></span><span class="v" id="rMonthly">—</span></li>
+          </ul>
+
+          <div class="lead-gate">
+            <p class="lead-copy">想進一步降低月負擔？留下聯絡方式，讓專屬理財顧問依您的財力狀況，規劃可爭取的利率與成數，並提供客製化試算報告。</p>
+            <form class="lead-form" id="leadForm">
+              <input type="text" id="leadName" placeholder="姓名" required>
+              <input type="tel" id="leadPhone" placeholder="聯絡電話" required pattern="[0-9\-+ ]{8,}">
+              <button type="submit" class="cta">預約專屬試算諮詢</button>
+            </form>
+            <p class="lead-done" id="leadDone" hidden>已收到您的資料，專屬理財顧問將於一個工作日內與您聯繫。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="foot" id="contact">
@@ -358,3 +460,63 @@
     <p class="fine">本頁建案名稱、地址、規格與聯絡資訊均為虛構，非真實銷售資訊。距離與時間為示意值，室內圖片為示意圖。</p>
   </div>
 </footer>
+
+<script>
+  // ── 自備款與月負擔試算 ──
+  // 純前端示範：試算結果即時顯示、不設任何閱覽門檻；
+  // 「留下聯絡方式」只出現在試算之後，作為索取客製化方案的加值誘因，
+  // 藉此提高訪客留名意願，而不是用門檻擋住基本試算（那樣只會提高跳出率）。
+  (function () {
+    var loanForm   = document.getElementById('loanForm');
+    var loanResult = document.getElementById('loanResult');
+    var leadForm   = document.getElementById('leadForm');
+    var leadDone   = document.getElementById('leadDone');
+
+    var fmtWan = function (wan) {
+      return Math.round(wan).toLocaleString('zh-Hant-TW') + ' 萬元';
+    };
+    var fmtNT = function (nt) {
+      return 'NT$ ' + Math.round(nt).toLocaleString('zh-Hant-TW') + ' /月';
+    };
+
+    loanForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var priceWan = parseFloat(document.getElementById('price').value) || 0;
+      var downPct  = parseFloat(document.getElementById('downPct').value) || 0;
+      var ratePct  = parseFloat(document.getElementById('rate').value) || 0;
+      var years    = parseInt(document.getElementById('years').value, 10) || 30;
+
+      var downWan = priceWan * downPct / 100;
+      var loanWan = priceWan - downWan;
+      var loanNT  = loanWan * 10000;
+
+      var monthlyRate = ratePct / 100 / 12;
+      var months = years * 12;
+      var monthlyPay;
+      if (monthlyRate === 0) {
+        monthlyPay = loanNT / months;
+      } else {
+        monthlyPay = loanNT * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months));
+      }
+
+      document.getElementById('rDown').textContent    = fmtWan(downWan);
+      document.getElementById('rLoan').textContent     = fmtWan(loanWan);
+      document.getElementById('rMonthly').textContent  = fmtNT(monthlyPay);
+
+      loanResult.hidden = false;
+      leadDone.hidden = true;
+      leadForm.hidden = false;
+      leadForm.reset();
+    });
+
+    leadForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // 實際上線時，這裡改為送出至後端 API 或 CRM，例如：
+      // fetch('/api/leads', { method: 'POST', body: JSON.stringify({...}) })
+      // 目前僅作前端示範，直接顯示已收件訊息。
+      leadForm.hidden = true;
+      leadDone.hidden = false;
+    });
+  })();
+</script>
