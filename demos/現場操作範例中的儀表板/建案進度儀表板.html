@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工程進度總覽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-base:#101826;
+    --bg-panel:#16202F;
+    --line:#26364C;
+    --line-soft:#1E2A3C;
+    --text-primary:#EEF2F6;
+    --text-muted:#8FA1BA;
+    --teal:#45C4B0;
+    --amber:#E8A23D;
+    --green:#7ED9A0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg-base);
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size:40px 40px;
+    color:var(--text-primary);
+    font-family:'Noto Sans TC', sans-serif;
+    padding:48px 24px 80px;
+    min-height:100vh;
+  }
+  .wrap{max-width:960px;margin:0 auto;}
+
+  /* header */
+  header{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    border-bottom:1px solid var(--line);
+    padding-bottom:24px; margin-bottom:8px;
+    flex-wrap:wrap; gap:16px;
+  }
+  .title-block h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(28px,4vw,40px);
+    letter-spacing:-0.01em;
+    line-height:1.1;
+  }
+  .title-block p{
+    color:var(--text-muted);
+    font-size:14px; margin-top:8px;
+  }
+  .stamp{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--text-muted);
+    text-align:right;
+    line-height:1.6;
+    white-space:nowrap;
+  }
+  .stamp b{color:var(--text-primary); font-weight:500;}
+
+  /* summary row */
+  .summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--line);
+    margin:32px 0 48px;
+  }
+  .summary .cell{
+    padding:20px 18px;
+    border-right:1px solid var(--line);
+  }
+  .summary .cell:last-child{border-right:none;}
+  .summary .cell .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:28px;
+    font-weight:700;
+  }
+  .summary .cell .lbl{
+    color:var(--text-muted);
+    font-size:12.5px;
+    margin-top:6px;
+  }
+  .summary .cell.teal .num{color:var(--teal);}
+  .summary .cell.amber .num{color:var(--amber);}
+
+  /* section label */
+  .sec-label{
+    font-size:13px;
+    color:var(--text-muted);
+    border-bottom:1px solid var(--line);
+    padding-bottom:10px;
+    margin-bottom:4px;
+    display:flex; justify-content:space-between;
+  }
+  .sec-label span:last-child{font-family:'JetBrains Mono', monospace; font-size:11px;}
+
+  /* progress rows */
+  .rows{margin-bottom:56px;}
+  .row{
+    display:grid;
+    grid-template-columns:150px 1fr 190px 88px;
+    align-items:center;
+    gap:18px;
+    padding:16px 0;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .row .name{
+    font-weight:500;
+    font-size:15px;
+  }
+  .row .stage{
+    display:block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--text-muted);
+    margin-top:4px;
+  }
+  .track{
+    position:relative;
+    height:14px;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+  }
+  .track::before{
+    content:'';
+    position:absolute; inset:0;
+    background-image:repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 10%);
+    opacity:.5;
+  }
+  .fill{
+    position:absolute; top:0; left:0; bottom:0;
+    background:var(--fill-color, var(--teal));
+  }
+  .pct{
+    position:absolute;
+    right:-38px; top:50%; transform:translateY(-50%);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px; font-weight:500;
+    color:var(--text-primary);
+  }
+  .units{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    color:var(--text-muted);
+    text-align:right;
+  }
+  .units b{color:var(--text-primary); font-weight:500;}
+  .status-tag{
+    font-size:12px;
+    text-align:right;
+    padding:4px 0;
+    position:relative;
+  }
+  .status-tag::before{
+    content:'';
+    display:inline-block;
+    width:6px; height:6px;
+    margin-right:6px;
+    background:var(--dot-color, var(--teal));
+  }
+
+  /* sold ratio grid */
+  .rings{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-top:24px;
+  }
+  .ring-cell{
+    background:var(--bg-base);
+    padding:22px 20px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .ring-cell svg{flex-shrink:0;}
+  .ring-cell .rc-name{font-size:13.5px; font-weight:500; margin-bottom:4px;}
+  .ring-cell .rc-sub{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px; color:var(--text-muted);
+  }
+
+  footer{
+    margin-top:56px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    color:var(--text-muted);
+    font-size:11.5px;
+    font-family:'JetBrains Mono', monospace;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width:640px){
+    .row{grid-template-columns:1fr; gap:8px;}
+    .units, .status-tag{text-align:left;}
+    .pct{right:auto; left:calc(100% - 34px);}
+    .summary{grid-template-columns:repeat(2,1fr);}
+    .summary .cell:nth-child(2){border-right:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title-block">
+      <h1>工程進度總覽</h1>
+      <p>七件建案 · 施工階段與銷售即時對照</p>
+    </div>
+    <div class="stamp">
+      更新日期 <b>2026-09-07</b><br>
+      資料來源 built-in-data.csv
+    </div>
+  </header>
+
+  <div class="summary">
+    <div class="cell">
+      <div class="num">7</div>
+      <div class="lbl">建案總數</div>
+    </div>
+    <div class="cell teal">
+      <div class="num">55%</div>
+      <div class="lbl">平均完成率</div>
+    </div>
+    <div class="cell">
+      <div class="num">573 / 1,300</div>
+      <div class="lbl">已售戶數 / 總戶數</div>
+    </div>
+    <div class="cell amber">
+      <div class="num">2</div>
+      <div class="lbl">進度落後案件</div>
+    </div>
+  </div>
+
+  <div class="sec-label"><span>施工進度（依完成率排序）</span><span>PROGRESS %</span></div>
+  <div class="rows" id="rows"></div>
+
+  <div class="sec-label"><span>各案銷售比例</span><span>SOLD / TOTAL</span></div>
+  <div class="rings" id="rings"></div>
+
+  <footer>
+    <span>綠色＝即將完工　青色＝正常　琥珀＝落後</span>
+    <span>單位：新台幣未列示，僅顯示戶數與完成率</span>
+  </footer>
+
+</div>
+
+<script>
+const data = [
+  {name:"瑞光公館", stage:"裝修工程", pct:97, sold:88, total:90, status:"即將完工"},
+  {name:"青田大院", stage:"裝修工程", pct:91, sold:98, total:100, status:"正常"},
+  {name:"沐森",     stage:"結構體施工", pct:68, sold:142, total:180, status:"正常"},
+  {name:"松風雅築", stage:"結構體施工", pct:54, sold:60, total:150, status:"正常"},
+  {name:"文心一號", stage:"結構體施工", pct:40, sold:110, total:300, status:"正常"},
+  {name:"河岸首席", stage:"基礎開挖", pct:22, sold:45, total:220, status:"落後"},
+  {name:"南港雲頂", stage:"基礎開挖", pct:12, sold:30, total:260, status:"落後"},
+];
+
+const colorFor = s => s === "即將完工" ? "var(--green)" : s === "落後" ? "var(--amber)" : "var(--teal)";
+
+const rowsEl = document.getElementById("rows");
+data.slice().sort((a,b)=>b.pct-a.pct).forEach(d=>{
+  const c = colorFor(d.status);
+  const row = document.createElement("div");
+  row.className = "row";
+  row.innerHTML = `
+    <div class="name">${d.name}<span class="stage">${d.stage}</span></div>
+    <div class="track" style="margin-right:38px;">
+      <div class="fill" style="width:${d.pct}%; --fill-color:${c};"></div>
+      <span class="pct">${d.pct}%</span>
+    </div>
+    <div class="units"><b>${d.sold}</b> / ${d.total} 戶已售</div>
+    <div class="status-tag" style="--dot-color:${c}; color:${c};">${d.status}</div>
+  `;
+  rowsEl.appendChild(row);
+});
+
+const ringsEl = document.getElementById("rings");
+data.forEach(d=>{
+  const c = colorFor(d.status);
+  const ratio = d.sold/d.total;
+  const r = 26, circ = 2*Math.PI*r;
+  const offset = circ*(1-ratio);
+  const cell = document.createElement("div");
+  cell.className = "ring-cell";
+  cell.innerHTML = `
+    <svg width="64" height="64" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--line)" stroke-width="6"/>
+      <circle cx="32" cy="32" r="${r}" fill="none" stroke="${c}" stroke-width="6"
+        stroke-dasharray="${circ}" stroke-dashoffset="${offset}"
+        transform="rotate(-90 32 32)" stroke-linecap="butt"/>
+      <text x="32" y="37" text-anchor="middle" font-family="JetBrains Mono, monospace"
+        font-size="13" fill="var(--text-primary)">${Math.round(ratio*100)}%</text>
+    </svg>
+    <div>
+      <div class="rc-name">${d.name}</div>
+      <div class="rc-sub">${d.sold} / ${d.total} 戶</div>
+    </div>
+  `;
+  ringsEl.appendChild(cell);
+});
+</script>
+</body>
+</html>
